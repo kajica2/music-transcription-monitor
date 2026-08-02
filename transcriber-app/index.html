@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Transcription Monitor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- VexFlow for music notation -->
+    <script src="https://unpkg.com/vexflow@latest/releases/vexflow-min.js"></script>
+    <!-- WaveSurfer for waveform visualization -->
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+    <!-- Transformers.js for Whisper (we'll load it dynamically) -->
+    <script type="module">
+        // We'll load transformers.js dynamically to avoid blocking initial load
+    </script>
+    <!-- We'll add other libraries as needed -->
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel: File + Waveform -->
+        <div class="panel left-panel">
+            <div class="panel-header">
+                <h2>Audio File & Waveform</h2>
+            </div>
+            <div class="panel-content">
+                <div id="drop-zone">
+                    <p>Drag & drop audio file here</p>
+                    <p>or <input type="file" id="file-input" accept="audio/*"></p>
+                </div>
+                <div id="waveform-container">
+                    <div id="waveform"></div>
+                </div>
+                <div class="controls">
+                    <button id="play-btn">Play</button>
+                    <button id="stop-btn">Stop</button>
+                </div>
+                <div class="segment-controls">
+                    <label>Quality: 
+                        <select id="quality-select">
+                            <option value="keeper">Keeper</option>
+                            <option value="maybe" selected>Maybe</option>
+                            <option value="discard">Discard</option>
+                        </select>
+                    </label>
+                    <button id="export-segments">Export Selected Segments</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Panel: Transcription Output -->
+        <div class="panel center-panel">
+            <div class="panel-header">
+                <h2>Transcription Output</h2>
+                <div class="mode-toggle">
+                    <label>Live Mode: 
+                        <input type="checkbox" id="live-mode" checked>
+                    </label>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div id="transcription-output">
+                    <div id="transcription-progress">Ready...</div>
+                    <div id="transcription-text"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Chart Preview -->
+        <div class="panel right-panel">
+            <div class="panel-header">
+                <h2>Chart Preview</h2>
+                <div class="export-options">
+                    <button id="export-svg">Export SVG</button>
+                    <button id="export-pdf">Export PDF</button>
+                    <button id="export-musicxml">Export MusicXML</button>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div id="vexflow-container">
+                    <div id="svg-output"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js" type="module"></script>
+</body>
+</html>
