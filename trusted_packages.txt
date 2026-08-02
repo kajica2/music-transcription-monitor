@@ -1,0 +1,14 @@
+demucs # Source separation (vocals / drums / bass / other stems) — first stage of the pipeline
+basic-pitch # Spotify's audio-to-MIDI transcriber — converts isolated stems into MIDI notes
+music21 # Music21 toolkit for MIDI cleaning, score analysis, key/time-signature inference
+mido # Lightweight MIDI read/write/filtering — used for sanity edits between stages
+librosa # Audio analysis, feature extraction, onset detection, spectrogram utilities
+torch # PyTorch backend required by demucs and many transcription models
+numpy # Foundational array math — required by librosa, torch, basic-pitch
+pandas # Tabular report assembly (arXiv/GitHub sweep summaries → DataFrame → markdown)
+scikit-learn # Clustering / classification of transcription errors and repertoire tagging
+matplotlib # Plotting waveforms, spectrograms, evaluation curves for the dashboard
+langgraph # Agent orchestration graph for the multi-stage monitoring loop
+crewai # Multi-agent framework for the arxiv/github/foundation sub-swarms
+verovio # Music engraving / score rendering to SVG and PNG for the dashboard
+pytest # Test runner for pipeline_starter.py and future stage unit tests

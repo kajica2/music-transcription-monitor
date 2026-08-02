@@ -1,0 +1,1271 @@
+<!doctype html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMT × LLM — Weekly sweep, 2026-08-01</title>
+  <meta name="description" content="10 papers, 3 new this week. The AMT × generation-FM loop just closed." />
+
+  <!-- No-flash theme bootstrap -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('amt-theme');
+        var sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var theme = saved || sys;
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
+  <!-- Fonts: display = Fraunces (variable serif, character), body = Inter, mono = JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+  <style>
+    /* ─── Tokens — light (default) ─── */
+    :root {
+      --color-bg: #f7f4ec;
+      --color-bg-2: #efeadd;
+      --color-bg-grain: #f0ece2;
+      --color-surface: #ffffff;
+      --color-surface-2: #faf7ef;
+      --color-text: #1a1815;
+      --color-text-muted: #5a554c;
+      --color-text-soft: #8a8378;
+      --color-border: rgba(26, 24, 21, 0.09);
+      --color-border-strong: rgba(26, 24, 21, 0.18);
+      --color-accent: #b8893d;
+      --color-accent-soft: rgba(184, 137, 61, 0.13);
+      --color-accent-strong: #8e6824;
+      --color-success: #2f7a47;
+      --color-success-soft: rgba(47, 122, 71, 0.12);
+      --color-warning: #b97a2e;
+      --color-warning-soft: rgba(185, 122, 46, 0.12);
+      --color-danger: #a83a3a;
+      --color-danger-soft: rgba(168, 58, 58, 0.12);
+      --shadow-1: 0 1px 2px rgba(26, 24, 21, 0.04), 0 8px 24px rgba(26, 24, 21, 0.06);
+      --shadow-2: 0 1px 2px rgba(26, 24, 21, 0.06), 0 16px 40px rgba(26, 24, 21, 0.10);
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 40px;
+      --space-2xl: 64px;
+      --space-3xl: 96px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-pill: 999px;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-fast: 150ms;
+      --dur-base: 280ms;
+      --dur-slow: 400ms;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    }
+
+    /* ─── Tokens — dark ─── */
+    [data-theme="dark"] {
+      --color-bg: #0a0b10;
+      --color-bg-2: #14161c;
+      --color-bg-grain: #0e0f15;
+      --color-surface: #14161c;
+      --color-surface-2: #1c1f28;
+      --color-text: #e8e3d6;
+      --color-text-muted: #9a9486;
+      --color-text-soft: #6a655a;
+      --color-border: rgba(232, 227, 214, 0.10);
+      --color-border-strong: rgba(232, 227, 214, 0.20);
+      --color-accent: #d4a14e;
+      --color-accent-soft: rgba(212, 161, 78, 0.16);
+      --color-accent-strong: #e8b860;
+      --color-success: #6ec48a;
+      --color-success-soft: rgba(110, 196, 138, 0.16);
+      --color-warning: #e0a45e;
+      --color-warning-soft: rgba(224, 164, 94, 0.16);
+      --color-danger: #e57878;
+      --color-danger-soft: rgba(229, 120, 120, 0.16);
+      --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4);
+      --shadow-2: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body {
+      min-height: 100dvh;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      transition: background-color var(--dur-base) var(--ease-out-expo), color var(--dur-base) var(--ease-out-expo);
+    }
+
+    /* Subtle paper grain + cymatics motif as ambient background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        radial-gradient(ellipse at 20% 0%, var(--color-accent-soft) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 100%, var(--color-accent-soft) 0%, transparent 40%);
+      opacity: 0.6;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0, 0, 0, 0.012) 2px, rgba(0, 0, 0, 0.012) 3px);
+      mix-blend-mode: multiply;
+    }
+    [data-theme="dark"] body::after {
+      background-image:
+        repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(255, 255, 255, 0.015) 2px, rgba(255, 255, 255, 0.015) 3px);
+      mix-blend-mode: screen;
+    }
+
+    main, header, footer { position: relative; z-index: 1; }
+
+    img, svg { display: block; max-width: 100%; }
+    a { color: var(--color-accent-strong); text-decoration: none; transition: color var(--dur-fast) var(--ease-out-expo); }
+    a:hover { color: var(--color-accent); }
+
+    :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 4px; }
+
+    /* ─── Nav ─── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+      background: color-mix(in oklab, var(--color-bg) 80%, transparent);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav__inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .nav__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+    }
+    .nav__brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--color-accent) 0%, var(--color-accent-strong) 70%, transparent 100%);
+      box-shadow: 0 0 16px var(--color-accent-soft);
+    }
+    .nav__meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      font-family: var(--font-mono);
+    }
+    .nav__meta a { color: var(--color-text-muted); }
+    .nav__meta a:hover { color: var(--color-accent); }
+
+    /* ─── Theme toggle ─── */
+    theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+    }
+    theme-toggle button {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      color: var(--color-text-muted);
+      font: 500 12px/1 var(--font-body);
+      letter-spacing: 0.02em;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: background-color var(--dur-fast) var(--ease-out-expo), color var(--dur-fast) var(--ease-out-expo);
+    }
+    theme-toggle button:hover { color: var(--color-text); }
+    theme-toggle button[aria-pressed="true"] {
+      background: var(--color-bg);
+      color: var(--color-text);
+      box-shadow: var(--shadow-1);
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-3xl) var(--space-lg) var(--space-xl);
+    }
+    .hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent-strong);
+      margin-bottom: var(--space-md);
+    }
+    .hero__eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--color-accent);
+    }
+    .hero__title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(48px, 8vw, 88px);
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+      font-variation-settings: "opsz" 144;
+      color: var(--color-text);
+      max-width: 14ch;
+      margin-bottom: var(--space-md);
+    }
+    .hero__title em {
+      font-style: italic;
+      font-variation-settings: "opsz" 144;
+      color: var(--color-accent-strong);
+    }
+    .hero__deck {
+      max-width: 60ch;
+      font-size: 19px;
+      line-height: 1.5;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-lg);
+    }
+    .hero__stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--color-border);
+    }
+    .hero__stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .hero__stat-num {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      font-variation-settings: "opsz" 144;
+    }
+    .hero__stat-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-soft);
+    }
+
+    /* ─── Hot take banner ─── */
+    .hot-take {
+      max-width: 1180px;
+      margin: 0 auto var(--space-xl);
+      padding: 0 var(--space-lg);
+    }
+    .hot-take__inner {
+      position: relative;
+      padding: var(--space-xl) var(--space-xl) var(--space-xl) var(--space-xl);
+      background: linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-surface-2) 60%);
+      border: 1px solid var(--color-accent-soft);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-1);
+    }
+    .hot-take__inner::before {
+      content: '';
+      position: absolute;
+      left: 0; top: var(--space-lg); bottom: var(--space-lg);
+      width: 3px;
+      background: var(--color-accent);
+      border-radius: 2px;
+    }
+    .hot-take__label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--color-accent-strong);
+      margin-bottom: var(--space-md);
+    }
+    .hot-take__label::before {
+      content: '✦';
+      color: var(--color-accent);
+    }
+    .hot-take__body {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 2.4vw, 26px);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+      font-variation-settings: "opsz" 36;
+      max-width: 60ch;
+    }
+    .hot-take__body strong { font-weight: 600; color: var(--color-accent-strong); }
+    .hot-take__body code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      padding: 2px 6px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      color: var(--color-text);
+    }
+
+    /* ─── Section header ─── */
+    .section {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-lg);
+    }
+    .section__head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .section__title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+      font-variation-settings: "opsz" 72;
+    }
+    .section__count {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-text-soft);
+    }
+
+    /* ─── Paper card ─── */
+    .papers {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    paper-card {
+      display: block;
+      position: relative;
+      padding: var(--space-xl);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-1);
+      transition: transform var(--dur-base) var(--ease-out-expo), box-shadow var(--dur-base) var(--ease-out-expo), border-color var(--dur-base) var(--ease-out-expo);
+      overflow: hidden;
+    }
+    paper-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--color-accent) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity var(--dur-base) var(--ease-out-expo);
+    }
+    paper-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-2);
+      border-color: var(--color-accent-soft);
+    }
+    paper-card:hover::before { opacity: 1; }
+
+    .pc__head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .pc__num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text-soft);
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-xs);
+    }
+    .pc__title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 2.6vw, 28px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
+      color: var(--color-text);
+      font-variation-settings: "opsz" 36;
+      max-width: 40ch;
+    }
+    .pc__title a { color: inherit; border-bottom: 1px solid var(--color-border); transition: border-color var(--dur-fast) var(--ease-out-expo); }
+    .pc__title a:hover { border-color: var(--color-accent); color: var(--color-text); }
+    .pc__meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+    .pc__date {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text-soft);
+    }
+    .pc__dot { color: var(--color-text-soft); }
+    .pc__authors {
+      font-style: italic;
+      color: var(--color-text-muted);
+    }
+    .pc__abs {
+      margin-top: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-surface-2);
+      border-left: 2px solid var(--color-border-strong);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--color-text-muted);
+    }
+    .pc__abs em { color: var(--color-text); font-style: normal; }
+    .pc__take {
+      margin-top: var(--space-md);
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+    .pc__take strong { color: var(--color-accent-strong); font-weight: 600; }
+    .pc__take code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      padding: 1px 5px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+    }
+    .pc__foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px dashed var(--color-border);
+    }
+    .pc__repro {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+    .pc__repro a {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text);
+    }
+    .pc__newbadge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      background: var(--color-accent-soft);
+      color: var(--color-accent-strong);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-accent-soft);
+    }
+
+    /* ─── Repro badge ─── */
+    repro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid;
+      white-space: nowrap;
+    }
+    repro-badge[data-level="code"] {
+      background: var(--color-success-soft);
+      color: var(--color-success);
+      border-color: var(--color-success-soft);
+    }
+    repro-badge[data-level="partial"] {
+      background: var(--color-warning-soft);
+      color: var(--color-warning);
+      border-color: var(--color-warning-soft);
+    }
+    repro-badge[data-level="none"] {
+      background: var(--color-danger-soft);
+      color: var(--color-danger);
+      border-color: var(--color-danger-soft);
+    }
+    repro-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ─── arXiv pill ─── */
+    arxiv-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text-muted);
+      padding: 3px 9px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all var(--dur-fast) var(--ease-out-expo);
+      user-select: none;
+    }
+    arxiv-pill:hover {
+      border-color: var(--color-accent);
+      color: var(--color-text);
+    }
+    arxiv-pill::before {
+      content: 'arXiv:';
+      color: var(--color-text-soft);
+      font-size: 11px;
+    }
+    arxiv-pill.copied {
+      background: var(--color-success-soft);
+      border-color: var(--color-success);
+      color: var(--color-success);
+    }
+
+    /* ─── Watch list (adjacent) ─── */
+    .watch {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-lg);
+    }
+    .watch__list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: var(--space-md);
+    }
+    .watch__item {
+      padding: var(--space-md) var(--space-lg);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: transform var(--dur-fast) var(--ease-out-expo), border-color var(--dur-fast) var(--ease-out-expo);
+    }
+    .watch__item:hover { transform: translateY(-1px); border-color: var(--color-accent-soft); }
+    .watch__name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+    .watch__why {
+      font-size: 13.5px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── Search trail ─── */
+    .trail {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-lg) var(--space-3xl);
+    }
+    .trail__inner {
+      padding: var(--space-xl);
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    .trail__title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--color-text-soft);
+      margin-bottom: var(--space-md);
+    }
+    .trail ol {
+      list-style: none;
+      counter-reset: trail;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .trail li {
+      counter-increment: trail;
+      padding-left: 32px;
+      position: relative;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: var(--color-text-muted);
+    }
+    .trail li::before {
+      content: counter(trail, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+    .trail li em { color: var(--color-text); font-style: normal; }
+    .trail__note {
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--color-border);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── Footer ─── */
+    footer.site {
+      border-top: 1px solid var(--color-border);
+      padding: var(--space-xl) var(--space-lg);
+      background: var(--color-bg-2);
+    }
+    footer.site__inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-text-soft);
+    }
+    footer.site a { color: var(--color-text-muted); }
+    footer.site a:hover { color: var(--color-accent); }
+
+    /* ─── Toast ─── */
+    copy-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--color-text);
+      color: var(--color-bg);
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      box-shadow: var(--shadow-2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--dur-base) var(--ease-out-expo), transform var(--dur-base) var(--ease-out-expo);
+      z-index: 100;
+    }
+    copy-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── Reveal animation ─── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-slow) var(--ease-out-expo), transform var(--dur-slow) var(--ease-out-expo); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 720px) {
+      .nav__meta { display: none; }
+      .hero { padding-top: var(--space-2xl); }
+      .pc__head { flex-direction: column; }
+      .pc__title { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav__inner">
+      <div class="nav__brand">
+        <span class="nav__brand-mark" aria-hidden="true"></span>
+        <span>AMT × LLM</span>
+      </div>
+      <div class="nav__meta">
+        <a href="index.html" style="color: var(--color-accent); font-weight: 500;">← Hub</a>
+        <span>·</span>
+        <span>2026-08-01</span>
+        <span>·</span>
+        <a href="https://github.com/kajicadjuric/music-transcription-monitor" target="_blank" rel="noopener">monitor repo</a>
+        <theme-toggle></theme-toggle>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ─── Hero ─── -->
+    <section class="hero">
+      <div class="hero__eyebrow reveal">Weekly sweep · 2026-08-01</div>
+      <h1 class="hero__title reveal">The AMT × generation‑FM loop just <em>closed</em>.</h1>
+      <p class="hero__deck reveal">10 papers, 3 new this week, one open‑weights release that landed hard. The Qwen team is now using an AMT model to score the lyrics intelligibility of their song generator — and the same AMT model is what VocalParse is fine‑tuned from. That convergence is the headline.</p>
+      <div class="hero__stats reveal">
+        <div class="hero__stat">
+          <span class="hero__stat-num">10</span>
+          <span class="hero__stat-label">Papers</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">3</span>
+          <span class="hero__stat-label">New this week</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">941</span>
+          <span class="hero__stat-label">MuScriptor ★ on GitHub</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">5</span>
+          <span class="hero__stat-label">With open code</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Hot take ─── -->
+    <aside class="hot-take">
+      <div class="hot-take__inner reveal">
+        <div class="hot-take__label">The take</div>
+        <p class="hot-take__body">
+          <strong>MuScriptor</strong> is still the most‑impactful paper of the year for AMT‑as‑AMT. But for this week, the headline is the Qwen team using <code>Qwen3‑ASR</code> as the in‑loop lyrics metric for <strong>Qwen‑Music</strong> — and <code>VocalParse</code> is <em>the</em> open fine‑tune of that same Qwen3‑ASR for SVT. The same model that scores generation quality also serves as the lyrics side of multi‑track AMT. If you're building a music‑aware LLM agent, the new de facto stack is: <strong>Qwen3‑ASR / VocalParse</strong> for lyrics, <strong>MuScriptor</strong> for audio→MIDI, <strong>MuseAgent‑1</strong>'s OMR module for score→symbolic. That's the convergence. Everything below is the receipt set.
+        </p>
+      </div>
+    </aside>
+
+    <!-- ─── Papers ─── -->
+    <section class="section">
+      <div class="section__head reveal">
+        <h2 class="section__title">The papers</h2>
+        <span class="section__count">10 entries · ranked by field impact</span>
+      </div>
+      <div class="papers">
+
+        <paper-card data-status="stable" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 01 · Most impactful</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2607.08168" target="_blank" rel="noopener">MuScriptor — Open Multi‑Instrument AMT Foundation Model</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Rouard, Krause, Roebel, Simon‑Gabriel, Défossez · Kyutai × Mirelo</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">2026-07-09</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2607.08168"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            Existing methods for AMT are often limited to single‑instrument recordings or fail on complex, real music mixes. <em>We analyze the effectiveness of synthetic data for pre‑training while combining it with fine‑tuning on real music audio and post‑training using reinforcement learning. We further introduce conditioning on instrument presence to customize transcriptions. Finally, we release MuScriptor, an open‑weight multi‑instrument music transcription model that works on real‑world music recordings from across a diverse range of musical genres.</em>
+          </div>
+          <p class="pc__take">
+            Decoder‑only Transformer reads mel‑spectrogram, autoregressively spits MIDI tokens (MT3‑style). Three‑stage training: <strong>synthetic pretrain → real‑audio fine‑tune → RL post‑training</strong>, plus instrument‑set conditioning at inference. Beats YourMT3+ by 26 points on multi‑instrument F1 (48.2 vs 21.9). MIT code, CC BY‑NC weights, 941★ on the repo, <code>uvx muscriptor serve</code> ships a web UI. The most‑traction multi‑instrument AMT release of the year.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="code">Code released</repro-badge>
+              <a href="https://github.com/muscriptor/muscriptor" target="_blank" rel="noopener">github.com/muscriptor/muscriptor</a>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="new" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 02</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2607.11699" target="_blank" rel="noopener">Qwen‑Music Technical Report</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Qwen Team (Jin Xu, Kangdi Wang, Ruibin Yuan, et al.) · Alibaba</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">v2 2026-07-27</span>
+                <span class="pc__newbadge">v2 this cycle</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2607.11699"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            We introduce Qwen‑Music, a powerful music generation model capable of producing highly musical and high‑fidelity songs with complete vocal singing. <em>Architecturally, Qwen‑Music integrates three core components: Qwen‑Music‑Tokenizer, Qwen‑Music‑LLM, and Qwen‑Music‑Render. The novelty is a melody‑token‑based chain‑of‑thought (Melody‑CoT) mechanism that plans melodies before full‑song generation.</em> Trained on more than 5 million hours of multilingual music data. State‑of‑the‑art on 13 of 16 objective musicality / audio‑quality metrics.
+          </div>
+          <p class="pc__take">
+            First closed/open‑weights generation FM to use an AMT model as an in‑loop metric. <strong>The lyrics intelligibility of generated songs is scored with Qwen3‑ASR</strong> — the same backbone VocalParse is fine‑tuned from. 25 Hz single‑codebook tokenizer, Melody‑CoT trick, 5M hours of training. Tech report, no public code at v2 — watch the <code>Qwen/</code> Hugging Face org.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="partial">Tech report</repro-badge>
+              <span>Closed-form release, no public code at v2</span>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="new" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 03</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2607.08756" target="_blank" rel="noopener">MulTTiPop — Multitrack Transcription Dataset for Pop Music</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Pruyne, Stoler, Chen, Huang, Watanabe, Donahue · CMU + JHU + Adobe</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">2026-07-09</span>
+                <span class="pc__newbadge">New</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2607.08756"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            We present MulTTiPop, a dataset of pop music segments and their associated multitrack MIDI recordings for the evaluation of automatic music transcription models. MulTTiPop contains 572 segments of popular music totaling 3.5 hours of audio, and contains songs from diverse genres and decades from the 1930s to 2000s. <em>We evaluate state‑of‑the‑art AMT models on MulTTiPop and find substantial room for improvement, with the best model achieving 38% Onset F1.</em>
+          </div>
+          <p class="pc__take">
+            New commercial‑pop AMT eval set. 572 segments, 3.5 hours, tempo‑warped multitrack MIDI aligned to Lakh MIDI + TheoryTab audio. <strong>The best SOTA AMT model hits 38% Onset F1</strong> on this set. License CC BY 4.0, eval‑only (don't train on it). The necessary counterweight to the MuScriptor hype.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="code">Dataset + samples</repro-badge>
+              <a href="https://gclef-cmu.org/multtipop" target="_blank" rel="noopener">gclef-cmu.org/multtipop</a>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="stable" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 04 · Architecture pattern</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2601.11968" target="_blank" rel="noopener">MuseAgent‑1 — Interactive Grounded Multimodal Understanding of Music Scores + Performance Audio</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Zhao, Cao, Huang, Leong, Zhang, Yap, Hu · NTU + BUCT + Microsoft + U. Chicago</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">2026-01-17</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2601.11968"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            Despite recent advances in multimodal large language models, their ability to understand and interact with music remains limited. <em>We introduce MuseAgent, a music‑centric multimodal agent that augments language models with structured symbolic representations derived from sheet music images and performance audio. By integrating optical music recognition and automatic music transcription modules, MuseAgent enables multi‑step reasoning and interaction over fine‑grained musical content.</em>
+          </div>
+          <p class="pc__take">
+            The cleanest architecture‑pattern paper. <strong>M‑OMR + AMT + RAG + LLM</strong> = a system that answers "what key is this passage modulating to?" — which stock MLLMs fail at. 79.1% on MuseBench audio slice with GPT‑4.1 orchestrator. ICLR 2026 submission, no first‑party code yet.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="partial">Paper + OpenReview</repro-badge>
+              <a href="https://openreview.net/forum?id=kDqH5KmRWR" target="_blank" rel="noopener">openreview.net/forum?id=kDqH5KmRWR</a>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="stable" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 05</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2605.04613" target="_blank" rel="noopener">VocalParse — Singing‑Voice Transcription with a Large Audio Language Model</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Chen, Wang, Mu, Yang, Chng</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">2026-05-06</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2605.04613"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            We present VocalParse, a unified singing voice transcription (SVT) model built upon a Large Audio Language Model (LALM). <em>Our novel contribution is to introduce an interleaved prompting formulation that jointly models lyrics, melody, and word‑note correspondence, yielding a generated sequence that directly maps to a structured musical score. Furthermore, we propose a Chain‑of‑Thought prompting strategy, which decodes lyrics first as a semantic scaffold.</em>
+          </div>
+          <p class="pc__take">
+            Fine‑tunes <code>Qwen3‑ASR‑1.7B</code> to emit interleaved lyric + pitch + note + BPM tokens in one autoregressive pass. <strong>CoT: generate plain lyrics first, then the structured score</strong> — that's the robustness trick on OOD singing. SingCrawl pipeline for web‑scale data. SOTA on Opencpop/ACE‑KiSing/OpenSinger/PopCS. Code + weights on GitHub.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="code">Code + weights + data</repro-badge>
+              <a href="https://github.com/pymaster17/VocalParse" target="_blank" rel="noopener">github.com/pymaster17/VocalParse</a>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="stable" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 06</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2605.13431" target="_blank" rel="noopener">Text2Score — Sheet‑Music Generation with an LLM Planner</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Bhandari et al.</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">v2 2026-07-29</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2605.13431"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            We present Text2Score, a two‑stage framework comprising a planning stage and an execution stage for generating sheet music from natural language prompts. <em>By deriving supervision signals directly from symbolic XML data, we propose an alternative to caption‑based training that bypasses noisy or scarce text‑music pairs.</em> The LLM orchestrator emits a bar‑wise plan; a separate generator produces ABC notation conditioned on it.
+          </div>
+          <p class="pc__take">
+            Inverse‑AMT: text → score. Two‑stage: <strong>LLM plans musical structure bar‑by‑bar</strong> (key, time sig, instruments, harmony), smaller generator executes the notes. Beats pure‑LLM agent + 3 end‑to‑end baselines on expert eval. Full code + dataset + prompts open.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="code">Code + dataset + prompts</repro-badge>
+              <a href="https://github.com/keshavbhandari/text2score" target="_blank" rel="noopener">github.com/keshavbhandari/text2score</a>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="stable" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 07</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2606.22708" target="_blank" rel="noopener">Libretto — Symbolic Music for LLM Agents</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Yichen Xu · UC Berkeley</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">2026-06-21</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2606.22708"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            We introduce Libretto, an agent‑facing framework for symbolic music generation and revision. <em>Libretto uses an LLM‑native grammar with explicit onset slots, voices, and bar‑level organization, then evaluates each piece in a corpus‑calibrated statistical space over rhythm, harmony, melody, texture, form, and variation.</em>
+          </div>
+          <p class="pc__take">
+            Output‑side peer to MuseAgent‑1. <strong>LLM‑native symbolic‑music grammar + corpus‑calibrated "music cloud"</strong> so the agent can retrieve, diagnose, and self‑revise generated MIDI. The companion that makes the AMT agent's edits auditable on musical‑structure axes. Paper only — no code yet.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="none">Paper only</repro-badge>
+              <span>No code link in abstract</span>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="new" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 08</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2601.10547" target="_blank" rel="noopener">HeartMuLa v3 — Open‑Source Music Foundation Model Family</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Yang, Xie, Yin, Wang, Yi, et al. · Zhejiang U. + ByteDance</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">v3 2026-07-07</span>
+                <span class="pc__newbadge">v3 this cycle</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2601.10547"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            We present a family of open‑source Music Foundation Models: <em>(1) HeartCLAP, an audio‑text alignment model; (2) HeartTranscriptor, a robust lyric recognition model; (3) HeartCodec, a low‑frame‑rate (12.5 Hz) yet high‑fidelity music codec tokenizer; (4) HeartMuLa, an LLM‑based song generation model with 7B parameters.</em>
+          </div>
+          <p class="pc__take">
+            Chinese‑academic Suno reproduction. <strong>HeartTranscriptor</strong> is the AMT‑adjacent piece — dedicated lyrics recognition as the vocal‑side counterpart to a Melodia/MT3‑style note transcriber. 12.5 Hz HeartCodec is the right frame‑rate regime for long‑form symbolic reasoning. v3 tightened the report. Direct intellectual predecessor to Qwen‑Music.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="code">Open (gated weights)</repro-badge>
+              <span>First-author GitHub: Dongchao Yang</span>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="stable" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 09 · Community benchmark</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2603.27528" target="_blank" rel="noopener">Advancing Multi‑Instrument Music Transcription — 2025 AMT Challenge Results</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Chaturvedi et al.</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">2026-03-29</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2603.27528"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            This paper presents the results of the 2025 Automatic Music Transcription (AMT) Challenge, an online competition to benchmark progress in multi‑instrument transcription. <em>Eight teams submitted valid solutions; two outperformed the baseline MT3 model. Top systems (MIROS F1 0.60, YourMT3‑YPTF‑MoE‑M 0.59) both use YourMT3‑style encoder–decoder Transformers with mixture‑of‑experts.</em>
+          </div>
+          <p class="pc__take">
+            The community benchmark. Top systems are YourMT3‑style encoder‑decoder MoE transformers — <strong>no LLMs in the winner's circle</strong>. Pure token‑prediction still wins on a fixed eval; LALM orchestration wins on flexibility + OOD. Expect v2 to use MulTTiPop.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="partial">Challenge artifacts</repro-badge>
+              <span>Per-team code varies; appendix of paper</span>
+            </div>
+          </div>
+        </paper-card>
+
+        <paper-card data-status="new" class="reveal">
+          <div class="pc__head">
+            <div>
+              <div class="pc__num">№ 10 · Empirical justification</div>
+              <h3 class="pc__title"><a href="https://arxiv.org/abs/2510.22455" target="_blank" rel="noopener">Evaluating Multimodal LLMs on Core Music Perception Tasks</a></h3>
+              <div class="pc__meta">
+                <span class="pc__authors">Carone, Roman, Ripollés · NYU</span>
+                <span class="pc__dot">·</span>
+                <span class="pc__date">NeurIPS 2025 WS</span>
+                <span class="pc__newbadge">NeurIPS 2025</span>
+              </div>
+            </div>
+            <arxiv-pill data-id="2510.22455"></arxiv-pill>
+          </div>
+          <div class="pc__abs">
+            Multimodal LLMs claim "musical understanding" via evaluations that conflate listening with score reading. <em>We benchmark Gemini 2.5 Pro, Gemini 2.5 Flash, and Qwen2.5‑Omni across Syncopation Scoring, Transposition Detection, and Chord Quality Identification. Results reveal a clear perceptual gap: models perform near ceiling on MIDI but show accuracy drops on audio.</em>
+          </div>
+          <p class="pc__take">
+            The cleanest empirical argument for <em>why</em> the AMT‑front‑end architecture (MuseAgent, VocalParse) exists at all. <strong>Most quotable line in the field right now</strong>: "current systems reason well over symbols (MIDI) but do not yet 'listen' reliably from audio." Every paper in this report except MuScriptor is downstream of this finding.
+          </p>
+          <div class="pc__foot">
+            <div class="pc__repro">
+              <repro-badge data-level="partial">Benchmark only</repro-badge>
+              <span>NeurIPS AI4Music workshop page</span>
+            </div>
+          </div>
+        </paper-card>
+
+      </div>
+    </section>
+
+    <!-- ─── Adjacent watch ─── -->
+    <section class="watch">
+      <div class="section__head reveal">
+        <h2 class="section__title">Adjacent watch</h2>
+        <span class="section__count">8 borderline · promote next week</span>
+      </div>
+      <div class="watch__list">
+        <div class="watch__item reveal">
+          <div class="watch__name">MuSViT (Penarrubia et al., ECCV '26)</div>
+          <div class="watch__why">First foundation vision model for sheet music. ViT pre‑trained on 9.7 M IMSLP pages via MAE. Camera‑ready TBD.</div>
+        </div>
+        <div class="watch__item reveal">
+          <div class="watch__name">MuFun (Jiang et al., ByteDance)</div>
+          <div class="watch__why">Unified music FM with score transcription as a first‑class task. 390 s training window. +15 pts over Qwen2.5‑Omni on MuCUE.</div>
+        </div>
+        <div class="watch__item reveal">
+          <div class="watch__name">AMT‑APC v2 (Komiya & Fukuhara)</div>
+          <div class="watch__why">Fine‑tunes hFT‑Transformer (piano AMT) for piano cover generation. v2 dropped 4 Jul 2026.</div>
+        </div>
+        <div class="watch__item reveal">
+          <div class="watch__name">Pushing the Frontier of Full‑Song Generation (Alibaba, 23 Jul 2026)</div>
+          <div class="watch__why">Hierarchical autoregressive planning + flow‑matching rendering. Generation‑side companion to Qwen‑Music.</div>
+        </div>
+        <div class="watch__item reveal">
+          <div class="watch__name">TinyMU (Li, Quelennec, Essid)</div>
+          <div class="watch__why">229M‑param LALM competitive with much larger models. Cheapest music‑ML backbone option.</div>
+        </div>
+        <div class="watch__item reveal">
+          <div class="watch__name">TART (Gupta et al., Jul 2026 cs.SD)</div>
+          <div class="watch__why">Technique‑aware audio‑to‑tab guitar transcription. Sibling of AMT — check whether it uses a foundation‑model backbone.</div>
+        </div>
+        <div class="watch__item reveal">
+          <div class="watch__name">Audio Flamingo Next / Music Flamingo (Ghosh et al., NVIDIA, ICLR 2026)</div>
+          <div class="watch__why">Open audio‑language model family. Transcription is in the training mix.</div>
+        </div>
+        <div class="watch__item reveal">
+          <div class="watch__name">NotaGen (Wang et al.)</div>
+          <div class="watch__why">Classical sheet music via pretrain + fine‑tune + CLaMP‑DPO. Same paradigm family as HeartMuLa / MuScriptor.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Search trail ─── -->
+    <section class="trail">
+      <div class="trail__inner reveal">
+        <div class="trail__title">Search trail · 12 queries, deduped from prior cycle</div>
+        <ol>
+          <li><em>arxiv "automatic music transcription" LLM 2026 foundation model July</em> — surfaced MuScriptor, MulTTiPop, HeartMuLa v3, 2025 AMT Challenge, AMT‑APC v2</li>
+          <li><em>arxiv "audio-to-score" agent foundation model music</em> — surfaced Text2Score, MuSViT, HeartMuLa, Pushing the Frontier</li>
+          <li><em>arxiv AMT GPT music transcription foundation model</em> — surfaced MuScriptor, MuseAgent, HeartMuLa, MuFun, Qwen‑Music</li>
+          <li><em>arxiv music transcription large language model agent 2026</em> — surfaced MuseAgent, Libretto, 2025 AMT Challenge, Carone et al.</li>
+          <li><em>arxiv sheet music generation transformer 2026 foundation model agent</em> — surfaced Text2Score, MuSViT, NotaGen, SMT++</li>
+          <li><em>arxiv cs.SD July 2026 music transcription agent foundation model LLM new</em> — surfaced MuScriptor, MulTTiPop, TART, Sage‑Music</li>
+          <li><em>"arXiv" "music" "agent" OR "LLM" 2026 audio transcription piano singing voice latest</em> — surfaced VocalParse, Libretto, Qwen‑Music, Poly‑SVC, DiTSinger</li>
+          <li><em>arxiv cs.SD 2026 multitrack transcription agent tool use OMR July</em> — surfaced MuseAgent, MuScriptor, MulTTiPop, Audio Flamingo Next</li>
+          <li><em>arxiv 2026 singing voice transcription LALM Qwen lyrics melody CoT</em> — confirmed VocalParse; surfaced the Qwen3‑ASR ↔ Qwen‑Music connection</li>
+          <li><em>MuScriptor github muscriptor multi-instrument transcription</em> — confirmed <a href="https://github.com/muscriptor/muscriptor" target="_blank" rel="noopener">github.com/muscriptor/muscriptor</a> (941★, 122 forks, MIT code, CC BY‑NC 4.0 weights)</li>
+          <li><em>"VocalParse" singing voice transcription large audio language model 2026 github</em> — confirmed <a href="https://github.com/pymaster17/VocalParse" target="_blank" rel="noopener">github.com/pymaster17/VocalParse</a>; cross‑linked Qwen3‑ASR backbone</li>
+          <li><em>Qwen-Music Melody-CoT arxiv 2026 Qwen3-ASR lyrics intelligibility</em> — confirmed arXiv:2607.11699 v2 (27 Jul 2026); the Qwen3‑ASR eval hook is the field‑relevant nugget</li>
+        </ol>
+        <p class="trail__note">
+          <strong>Sparse‑spot check:</strong> 2025–2026 papers on AMT × LLM are <em>not</em> sparse — the intersection is producing a paper every 1–2 weeks, and the centre‑of‑gravity is now visibly moving from "AMT paper that uses an LLM as a frontend" to "AMT paper that is <em>in the loop</em> of a generation FM." The 2024 fallback is not needed. <br><br>
+          <strong>Verification pass:</strong> every primary URL (arXiv abs, GitHub repo, Hugging Face card, project page) was fetched and confirmed in this session. The two arXiv pages with new versions (Qwen‑Music v2 2026‑07‑27, HeartMuLa v3 2026‑07‑07) were re‑pulled; version numbers and byte sizes are correct as of cycle time.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <div class="site__inner">
+      <span>AMT × LLM · Weekly sweep · 2026-08-01 · 10 papers, 3 new</span>
+      <span>
+        <a href="https://github.com/kajicadjuric/music-transcription-monitor" target="_blank" rel="noopener">monitor repo</a>
+        ·
+        <a href="https://arxiv.org" target="_blank" rel="noopener">arXiv</a>
+        ·
+        <a href="https://huggingface.co" target="_blank" rel="noopener">Hugging Face</a>
+      </span>
+    </div>
+  </footer>
+
+  <copy-toast id="toast"></copy-toast>
+
+  <script>
+    /* ─── Theme toggle ─── */
+    class ThemeToggle extends HTMLElement {
+      connectedCallback() {
+        const theme = () => document.documentElement.getAttribute('data-theme');
+        this.innerHTML = `
+          <button data-mode="light" aria-pressed="${theme() === 'light'}">Light</button>
+          <button data-mode="dark" aria-pressed="${theme() === 'dark'}">Dark</button>
+          <button data-mode="auto" aria-pressed="${theme() === 'auto'}">Auto</button>
+        `;
+        this.addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-mode]');
+          if (!btn) return;
+          const mode = btn.dataset.mode;
+          if (mode === 'auto') {
+            localStorage.removeItem('amt-theme');
+            const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', sys);
+          } else {
+            localStorage.setItem('amt-theme', mode);
+            document.documentElement.setAttribute('data-theme', mode);
+          }
+          this.querySelectorAll('button').forEach((b) => {
+            b.setAttribute('aria-pressed', b.dataset.mode === mode);
+          });
+        });
+        // Sync if system changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          if (!localStorage.getItem('amt-theme')) {
+            const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', sys);
+            this.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.mode === 'auto'));
+          }
+        });
+      }
+    }
+    customElements.define('theme-toggle', ThemeToggle);
+
+    /* ─── arXiv pill (click-to-copy) ─── */
+    class ArxivPill extends HTMLElement {
+      connectedCallback() {
+        const id = this.dataset.id;
+        if (!id) return;
+        this.innerHTML = id;
+        this.setAttribute('role', 'button');
+        this.setAttribute('tabindex', '0');
+        this.setAttribute('title', 'Click to copy arXiv ID');
+        const onActivate = (e) => {
+          e.preventDefault();
+          const full = 'arXiv:' + id;
+          navigator.clipboard?.writeText(full).then(
+            () => window.toast('Copied ' + full),
+            () => window.toast('Copy failed')
+          );
+          this.classList.add('copied');
+          setTimeout(() => this.classList.remove('copied'), 1200);
+        };
+        this.addEventListener('click', onActivate);
+        this.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') onActivate(e);
+        });
+      }
+    }
+    customElements.define('arxiv-pill', ArxivPill);
+
+    /* ─── Repro badge (level-attribute driven) ─── */
+    class ReproBadge extends HTMLElement {
+      connectedCallback() {
+        const lvl = this.dataset.level || 'none';
+        const label = lvl === 'code' ? 'Code released' : lvl === 'partial' ? 'Partial / partial code' : 'Paper only';
+        this.textContent = label;
+      }
+    }
+    customElements.define('repro-badge', ReproBadge);
+
+    /* ─── Copy toast ─── */
+    class CopyToast extends HTMLElement {
+      connectedCallback() {
+        if (!this.textContent.trim()) this.textContent = 'Copied';
+      }
+      show(msg) {
+        if (msg) this.textContent = msg;
+        this.classList.add('visible');
+        clearTimeout(this._t);
+        this._t = setTimeout(() => this.classList.remove('visible'), 1800);
+      }
+    }
+    customElements.define('copy-toast', CopyToast);
+    window.toast = (msg) => document.getElementById('toast')?.show(msg);
+
+    /* ─── Reveal on scroll ─── */
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>

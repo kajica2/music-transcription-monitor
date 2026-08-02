@@ -1,0 +1,32 @@
+# Dependencies
+setup/node_modules/
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs (keep the directory, ignore the running log)
+logs/*.log
+!logs/.gitkeep
+
+# Build / temp
+*.tmp
+*.bak
+
+# Local-only static-server / test artifacts
+out/assets/stems/
+out/assets/midi/
+out/assets/musicxml/
+out/assets/png/

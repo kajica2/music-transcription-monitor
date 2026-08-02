@@ -1,0 +1,142 @@
+[
+  {
+    "source": "arXiv",
+    "title": "MuScriptor \u2014 Open Multi-Instrument AMT Foundation Model",
+    "url": "https://arxiv.org/abs/2607.08168"
+  },
+  {
+    "source": "arXiv",
+    "title": "MuseAgent-1 \u2014 Multimodal Agent for Music Scores + Performance Audio",
+    "url": "https://arxiv.org/abs/2601.11968"
+  },
+  {
+    "source": "arXiv",
+    "title": "VocalParse \u2014 Singing-Voice Transcription with a Large Audio Language Model",
+    "url": "https://arxiv.org/abs/2605.04613"
+  },
+  {
+    "source": "arXiv",
+    "title": "Libretto \u2014 Symbolic Music for LLM Agents",
+    "url": "https://arxiv.org/abs/2606.22708"
+  },
+  {
+    "source": "arXiv",
+    "title": "Text2Score \u2014 Sheet-Music Generation with an LLM Planner",
+    "url": "https://arxiv.org/abs/2605.13431"
+  },
+  {
+    "source": "arXiv",
+    "title": "HeartMuLa \u2014 Open-Source Music Foundation Model Family",
+    "url": "https://arxiv.org/abs/2601.10547"
+  },
+  {
+    "source": "arXiv",
+    "title": "Advancing Multi-Instrument Music Transcription \u2014 2025 AMT Challenge Results",
+    "url": "https://arxiv.org/abs/2603.27528"
+  },
+  {
+    "source": "arXiv",
+    "title": "MuFun \u2014 Unified Foundation Model for Music Understanding",
+    "url": "https://arxiv.org/abs/2508.01178"
+  },
+  {
+    "source": "arXiv",
+    "title": "MuSViT \u2014 First Foundation Vision Model for Sheet Music",
+    "url": "https://arxiv.org/abs/2606.31811"
+  },
+  {
+    "source": "arXiv",
+    "title": "AMT-APC \u2014 Fine-Tuning an AMT Model for Piano Cover",
+    "url": "https://arxiv.org/abs/2409.14086"
+  },
+  {
+    "source": "GitHub",
+    "title": "langchain-ai/langgraph",
+    "url": "https://github.com/langchain-ai/langgraph"
+  },
+  {
+    "source": "GitHub",
+    "title": "crewAIInc/crewAI",
+    "url": "https://github.com/crewAIInc/crewAI"
+  },
+  {
+    "source": "GitHub",
+    "title": "facebookresearch/demucs",
+    "url": "https://github.com/facebookresearch/demucs"
+  },
+  {
+    "source": "GitHub",
+    "title": "spotify/basic-pitch",
+    "url": "https://github.com/spotify/basic-pitch"
+  },
+  {
+    "source": "GitHub",
+    "title": "cuthbertLab/music21",
+    "url": "https://github.com/cuthbertLab/music21"
+  },
+  {
+    "source": "GitHub",
+    "title": "bytedance/piano_transcription",
+    "url": "https://github.com/bytedance/piano_transcription"
+  },
+  {
+    "source": "GitHub",
+    "title": "magenta/mt3",
+    "url": "https://github.com/magenta/mt3"
+  },
+  {
+    "source": "GitHub",
+    "title": "omnizart/omnizart",
+    "url": "https://github.com/omnizart/omnizart"
+  },
+  {
+    "source": "Assets \u00b7 test",
+    "title": "URMP Dataset",
+    "url": "https://labsites.rochester.edu/air/projects/URMP.html"
+  },
+  {
+    "source": "Assets \u00b7 test",
+    "title": "Musopen",
+    "url": "https://musopen.org/music/"
+  },
+  {
+    "source": "Assets \u00b7 test",
+    "title": "Freesound",
+    "url": "https://freesound.org/"
+  },
+  {
+    "source": "Assets \u00b7 eval",
+    "title": "MusicNet \u2014 same as 1.1",
+    "url": "https://zenodo.org/records/5120004"
+  },
+  {
+    "source": "Assets \u00b7 eval",
+    "title": "MAESTRO v3.0.0",
+    "url": "https://magenta.withgoogle.com/datasets/maestro"
+  },
+  {
+    "source": "Assets \u00b7 eval",
+    "title": "Slakh2100-redux \u2014 same as 1.6",
+    "url": "https://zenodo.org/records/4599666"
+  },
+  {
+    "source": "Assets \u00b7 eval",
+    "title": "URMP \u2014 same as 1.2",
+    "url": "https://labsites.rochester.edu/air/projects/URMP.html"
+  },
+  {
+    "source": "Assets \u00b7 eval",
+    "title": "Lakh MIDI Dataset v0.1",
+    "url": "https://colinraffel.com/projects/lmd/"
+  },
+  {
+    "source": "Assets \u00b7 eval",
+    "title": "International Music Score Library Project (IMSLP / Petrucci)",
+    "url": "https://imslp.org/"
+  },
+  {
+    "source": "Assets \u00b7 eval",
+    "title": "Aria-MIDI",
+    "url": "https://github.com/loubbrad/aria-midi"
+  }
+]

@@ -1,0 +1,67 @@
+AGENTIC MUSIC TRANSCRIPTION MONITOR — DAILY DIGEST
+2026-08-01  ·  Cycle 1  ·  pass-all termination met  ·  ~10 min wall-clock
+
+WHAT RAN
+- 5 parallel subagents: arXiv scan, GitHub pulse, project foundation, dashboard, asset research
+- All 5 returned PASS. Artifacts verified by read-back (not self-reports).
+
+HEADLINE FINDINGS
+
+1. arXiv (10 papers, 8 from 2026)
+   - HOT: MuScriptor (arXiv:2607.08168) — first open-weight multi-instrument AMT
+     foundation model that works on real-world music. 170k real songs + 1.45M
+     synthetic MIDIs, trained with the 3-stage LLM recipe. Multi-instrument F1
+     48.2 vs YourMT3+ at 21.9. Ships code: github.com/muscriptor/muscriptor.
+   - Honorable: VocalParse (LALM singing transcription, ships code),
+     MuseAgent-1 (architecture pattern), MuSViT (sheet-music ViT, ECCV '26).
+
+2. GitHub (8/8 repos)
+   - ALERT: omnizart/omnizart is GONE (404). Drop from watchlist.
+   - ACTION: langgraph v1.2.5 (ty migration from mypy) + crewAI v1.15.3a2
+     (setuptools bump for PYSEC-2026-3447) — upgrade promptly if used.
+   - DORMANT: basic-pitch last released 2023-04-10 (3+ years). Consider fork
+     or replacement with MuScriptor.
+
+3. Foundation (bootstrap)
+   - AGENTS.md: 118 lines, full project instructions committed.
+   - pipeline_starter.py: 4-stage stub (Demucs → Basic Pitch → music21 →
+     Verovio), valid Python, ast.parse OK.
+   - trusted_packages.txt: 14 packages with reasons.
+   - logs/agent_actions.log initialized.
+
+4. Dashboard (vanilla HTML+JS, zero external resources)
+   - dashboard/index.html: 915 lines, dark+light theme toggle with localStorage
+     persistence, 4 pipeline-stage cards, 4 weekly cards, monthly + quarterly
+     placeholders, next-actions list. Opens with file:// or any static server.
+
+5. Asset research (test audio + eval set)
+   - 30s test pick: MusicNet (CC-BY 4.0, real perf audio, per-note labels).
+   - Eval pick: Slakh2100 + URMP + CocoChorales (all CC-BY, multi-instrument).
+   - WARNINGS: MAESTRO and MAPS have NC clauses — non-commercial only.
+     DCMLab Bach Chorales has a license conflict (README says CC0, docs say
+     CC BY-NC-SA 4.0) — needs orchestrator decision.
+     Aria-MIDI license is "research use" — needs orchestrator decision.
+
+NEXT ACTIONS FOR HUMAN OPERATOR
+1. Approve replacing basic-pitch with MuScriptor in the audio→MIDI stage.
+   Adds 'muscriptor' to trusted_packages.txt.
+2. Approve dropping omnizart from the GitHub watchlist and adding
+   muscriptor/muscriptor in its place.
+3. Approve downloading one MusicNet 30s clip into assets/test_audio/ for
+   the monthly pipeline.
+4. Decide on the DCMLab license conflict and the Aria-MIDI license question
+   before any quarterly eval is run.
+
+WHERE TO LOOK
+- Project root: /Users/kajicadjuric/.minimax/workspace/music-transcription-monitor/
+- arXiv report: reports/weekly_2026-08-01_arxiv.md (20 KB, 10 papers)
+- GitHub report: reports/weekly_2026-08-01_github.md (12 KB, 8 repos)
+- Asset report: reports/asset_research_2026-08-01.md (32 KB, 19 sources)
+- Cycle Report: scratchpad/cycle-1-2026-08-01.md
+- Dashboard: dashboard/index.html (open with `open dashboard/index.html`)
+
+CYCLE 2 PREVIEW
+- Trigger: First Monday of August 2026 (Aug 3 or 4).
+- Scope: monthly pipeline rebuild (Demucs → Basic Pitch → music21 → Verovio)
+  on a 30-second test clip from MusicNet; health check vs prior month;
+  LangGraph critique-resynthesis loop test.
