@@ -3,10 +3,12 @@
 An autonomous research and pipeline project for **Automatic Music Transcription (AMT)**, audio-to-MIDI conversion, score rendering, and source separation. A subagent swarm runs on a weekly / monthly / quarterly schedule; the results are surfaced as an interactive HTML dashboard you can click through in any browser.
 
 **Repo:** https://github.com/kajica2/music-transcription-monitor
+**GitHub Pages:** https://kajica2.github.io/music-transcription-monitor/
 
 > **One-click access:**
-> - **Public URL (always fresh):** https://r50ix59e9vxop.space.minimax.io
-> - **Desktop launcher (macOS):** double-click `~/Desktop/open-dashboard.command` — opens the public URL, falls back to local if you're offline.
+> - **GitHub Pages (always fresh, free, no maintenance):** https://kajica2.github.io/music-transcription-monitor/
+> - **space.minimax.io (faster, ours):** https://r50ix59e9vxop.space.minimax.io
+> - **Desktop launcher (macOS):** double-click `~/Desktop/open-dashboard.command` — opens the GH Pages URL, falls back to local if you're offline.
 > - **Local file (no server):** `open dashboard/index.html` from a terminal.
 
 ---
