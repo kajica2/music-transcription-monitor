@@ -1,0 +1,197 @@
+{
+  "sources": [
+    {
+      "category": "test",
+      "name": "MusicNet",
+      "url": null,
+      "license": "**CC-BY 4.0** (verified in Zenodo \"Rights\" panel \u2014 `cc-by-4.0` icon present on the host page itself)",
+      "description": "330 freely-licensed classical chamber music recordings, ~34 h total, by 10 composers and 11 instruments (violin, viola, cello, flute, clarinet, etc.). Each piece ships with aligned `.wav` audio + per-note CSV labels + reference MIDI. Average track length ~6 minutes, so 30-second windows are trivial to slice.",
+      "fit": "The audio comes from European Archive, Isabella Stewart Gardner Museum, and Musopen \u2014 all CC-licensed/PD. Labels are human-verified (~4% error). Excellent for a monthly test because the audio is real performance audio (not synthesized) and you can pick any 30-second window with guaranteed instrument diversity. Limitation: download is 11.1 GB \u2014 the dataset is one-shot download, but you only need a few tracks for a single test clip.",
+      "verified": "2026-08-01 \u2014 Zenodo host page contains the CC-BY 4.0 license block in the right-rail \"Rights\" section and MD5 checksums for each tarball."
+    },
+    {
+      "category": "test",
+      "name": "URMP Dataset",
+      "url": "https://labsites.rochester.edu/air/projects/URMP.html",
+      "license": "**CC-BY 4.0** (per HuggingFace `jonflynn/urmp_jukebox_embeddings` mirror YAML header; original Dryad DOI also reports CC-BY attribution requirement)",
+      "description": "44 classical chamber-music pieces ranging from duets to quintets (duets, trios, quartets, quintets \u2014 149 isolated instrument tracks total). Each piece ships with the MIDI score, per-instrument isolated audio recordings, the assembled-mixture audio, and a video. 12.5 GB total package.",
+      "fit": "URMP is purpose-built for multi-instrument transcription evaluation. The isolated stems mean you can pre-stack exactly the instrument mix you want for the test, and the MIDI ground truth is right there. Pieces are short (typically under 2 min) so a 30-second slice is most of the piece. Limitation: only 44 pieces total, so you cannot refresh the test clip every month without eventually cycling. Also CC-BY (not CC0) so attribution must accompany the output.",
+      "verified": "2026-08-01 \u2014 Rochester lab page reachable and documents the package contents; CC-BY confirmed via downstream paper metadata."
+    },
+    {
+      "category": "test",
+      "name": "Musopen",
+      "url": "https://musopen.org/music/",
+      "license": "**Public Domain (PD) for compositions; CC0 / CC BY-SA for original recordings** \u2014 per-piece license is shown on each track's download page. Musopen's own FAQ: \"You may use our CC0 and public domain recordings in any project, for any purpose, without payment or attribution.\" License-per-track is the only safe way to consume it.",
+      "description": "2,400+ public-domain classical compositions (Bach, Beethoven, Chopin, etc.) and 1,800+ Musopen-original recordings. Free users get 5 downloads/day in MP3; paid ($55/yr) gets lossless FLAC.",
+      "fit": "Genuinely free of all restrictions for the CC0 / PD tier, and you can pick a specific movement of e.g. a Mozart string quintet for a 30-second test. Limitation: license varies per recording \u2014 must inspect each track's \"License\" header. Also: 5 free downloads/day throttles CI automation; CI agents would need a paid seat or a small pre-staged cache. No MIDI ground truth, so the test is \"audio only\" \u2014 you'd need a separate score to score transcription quality.",
+      "verified": "2026-08-01 \u2014 Musopen homepage and music landing page both loaded; per-track license field confirmed."
+    },
+    {
+      "category": "test",
+      "name": "Freesound",
+      "url": "https://freesound.org/",
+      "license": "**Mixed, per clip \u2014 CC0, CC BY 4.0, or CC BY-NC 4.0.** Per the Freesound FAQ, you must filter by license. Per-clip license is on every sound's description page; the API returns the license field on every result.",
+      "description": "714,000+ CC-licensed audio samples as of 2025, 536+ days of continuous audio. Mix of field recordings, instrument samples, ambient textures, sound effects. Searchable by keyword and instrument.",
+      "fit": "Ideal for synthesizing a custom 30-second multi-instrument test by stacking CC0 stems you find via search (e.g. individual violin, cello, piano, drums). Limitation: no canonical \"transcription ground truth\" \u2014 you choose stems yourself, then need to either accept the implicit \"ground truth = your hand-stacked mix\" or use a separate annotation tool. Requires API key for bulk use. CC-BY and CC0 are both safe for the pipeline; CC-BY-NC is not.",
+      "verified": "2026-08-01 \u2014 Freesound homepage, FAQ, and license-options page all loaded."
+    },
+    {
+      "category": "test",
+      "name": "MIR-1K (Multimedia Information Retrieval, 1000 song clips)",
+      "url": null,
+      "license": "**CC-BY 4.0** (verified on Figshare's license field)",
+      "description": "1000 16-kHz / 16-bit audio clips (4-13 seconds each, 133 minutes total) extracted from 110 Chinese karaoke songs. Music accompaniment in left channel, vocal in right channel. Comes with pitch annotations, lyrics, and singer identity.",
+      "fit": "Good for \"vocal + accompaniment\" 30-second windows (concatenate a few clips). Limitation: only 2 sources (voice + backing track), and clips are very short \u2014 not a true multi-instrument transcription stress test. Better suited to vocal/lyrics-related transcription than to the multi-instrument pipeline.",
+      "verified": "2026-08-01 \u2014 Figshare record page confirms CC-BY 4.0 badge and 760.45 MB size."
+    },
+    {
+      "category": "test",
+      "name": "Slakh2100-redux",
+      "url": null,
+      "license": "**CC-BY 4.0** (verified in Zenodo \"Rights\" panel \u2014 `cc-by-4.0` icon present)",
+      "description": "2100 multi-track audio mixtures synthesized from Lakh MIDI using professional-grade sample-based virtual instruments (187 patches across 34 classes). Each track ships with the mixture FLAC + per-stem FLACs + per-stem MIDI. 145 h of mixture, 104.3 GB compressed.",
+      "fit": "Best \"synthesized\" multi-instrument source \u2014 every stem has a perfect MIDI ground truth. A 30-second slice of any `TrackXXXXX/` directory is a complete multi-instrument test. Limitation: synthesized (not real instruments), so the timbral/breath/reverb characteristics differ from a real performance \u2014 this is a known gap that MusicNet or URMP covers. Also 104 GB download.",
+      "verified": "2026-08-01 \u2014 Zenodo host page contains CC-BY 4.0 license block and the known-duplicates warning."
+    },
+    {
+      "category": "eval",
+      "name": "MusicNet \u2014 same as 1.1",
+      "url": "https://zenodo.org/records/5120004",
+      "license": "**CC-BY 4.0**",
+      "description": "330 pieces, each with aligned audio + reference MIDI (in `musicnet_midis.tar.gz`) + per-note CSV labels. CSV-to-MusicXML conversion is mechanical.",
+      "fit": "330 pieces is comfortably above the 50-100 floor. Reference MIDIs are directly downloadable (2.6 MB tarball) and come from Classical Archives, Suzumidi, and HarfeSoft. Limitation: CC-BY (attribution required in any output render).",
+      "verified": "2026-08-01."
+    },
+    {
+      "category": "eval",
+      "name": "MAESTRO v3.0.0",
+      "url": "https://magenta.withgoogle.com/datasets/maestro",
+      "license": "**CC BY-NC-SA 4.0** (verified on the Magenta page's \"License\" section)",
+      "description": "1,276 piano performances, ~200 h, captured on Yamaha Disklaviers during the International Piano-e-Competition. Audio (44.1-48 kHz 16-bit PCM stereo) + MIDI with ~3 ms alignment. Train/val/test split built in.",
+      "fit": "Gold-standard for piano transcription. The MIDI is exactly what the Disklavier played (so it's true performance MIDI, not synthesized). The built-in splits keep the same composition out of multiple subsets. Limitation: **piano only** \u2014 not multi-instrument. Use as the piano-stratum of a multi-instrument eval, not as a multi-instrument eval by itself. Also **CC BY-NC-SA 4.0** \u2014 non-commercial share-alike. If the pipeline ships a commercial product, this dataset cannot be used as a holdout benchmark. (NC clause flagged for orchestrator.)",
+      "verified": "2026-08-01 \u2014 Magenta page reachable, SHA256 checksums published."
+    },
+    {
+      "category": "eval",
+      "name": "Slakh2100-redux \u2014 same as 1.6",
+      "url": "https://zenodo.org/records/4599666",
+      "license": "**CC-BY 4.0**",
+      "description": "2100 multi-track pieces, each with mixture + stems + MIDI per stem. Each MIDI is the input to the synthesizer, so it is exact ground truth.",
+      "fit": "2100 pieces is 20-40\u00d7 the 50-100 floor. Multi-instrument (every mix has at least piano/guitar/drums/bass; median track has 4-8 sources). Limitation: known duplicate-MIDI issue \u2014 the Zenodo \"redux\" version moves duplicates to an `omitted/` directory; the `omitted/` tracks must NOT be used for transcription evaluation per the dataset's own guidance.",
+      "verified": "2026-08-01."
+    },
+    {
+      "category": "eval",
+      "name": "CocoChorales Dataset",
+      "url": null,
+      "license": "**CC-BY 4.0** (verified on the Magenta page)",
+      "description": "240,000 synthesized chamber-ensemble pieces (~1,411 h of audio), performed by 13 instruments (violin, viola, cello, double bass, flute, oboe, clarinet, bassoon, saxophone, trumpet, french horn, trombone, tuba) across 4 ensemble types (string, brass, woodwind, random). Each example: mixture audio + per-source audio + aligned MIDI + multi-f0 + per-note expression (vibrato, loudness, brightness). \"Tiny\" subset is 24k train / 8k val / 8k test.",
+      "fit": "This is the largest multi-instrument AMT benchmark in existence. MIDI ground truth is exact (synthesizer input). \"Tiny\" subset is reasonable for quarterly eval. Limitation: 2.9 TB full / 4 TB uncompressed \u2014 you almost certainly want the tiny version. Synthesized, so it does not exercise real performance noise. CC-BY is permissive.",
+      "verified": "2026-08-01 \u2014 Magenta page and the GitHub data_download shell scripts both confirm CC-BY 4.0 and 2.9 TB / 569 GB main sizes."
+    },
+    {
+      "category": "eval",
+      "name": "URMP \u2014 same as 1.2",
+      "url": "https://labsites.rochester.edu/air/projects/URMP.html",
+      "license": "**CC-BY 4.0**",
+      "description": "44 multi-instrument pieces with MIDI scores + per-instrument audio + assembled mix + video.",
+      "fit": "Below the 50-100 floor (44 < 50), but the pieces are real human performances (not synthesized) and include score-engraved PDFs as well as MIDI. Suitable as a \"real performance\" supplement to a larger synthesized set. Limitation: 44 pieces is the entire dataset, and pieces are reused in the literature; you should be aware of evaluation contamination if the pipeline trains on URMP.",
+      "verified": "2026-08-01."
+    },
+    {
+      "category": "eval",
+      "name": "MAPS Database",
+      "url": null,
+      "license": "**CC BY-NC-SA 2.0 (France)** \u2014 a non-commercial French-jurisdiction variant. The same dataset is also covered by the A-MAPS augmentation paper (CC-BY 4.0) but that only covers the A-MAPS metadata, not the audio itself.",
+      "description": "~30 GB of synthesized piano audio (Disklavier + synth), ~30 h, with ground-truth MIDI for every audio file. Seven subsets (AkPnBcht, AkPnBsdf, etc.) plus the augmented A-MAPS version.",
+      "fit": "Long-standing AMT benchmark; many papers report results on MAPS so this gives a \"comparison to literature\" anchor. Limitation: **piano only** AND **CC BY-NC-SA 2.0 (France)** \u2014 the French NC-SA license is more restrictive than the international CC BY-NC-SA 4.0 (different jurisdiction, different terms). Flag for orchestrator if commercial shipping is on the roadmap.",
+      "verified": "2026-08-01 \u2014 Zenodo mirror verified, license page in the host confirms CC BY-NC-SA 2.0."
+    },
+    {
+      "category": "eval",
+      "name": "Bach Chorales (DCML corpus)",
+      "url": null,
+      "license": "**LICENCE CONFLICT \u2014 see Risks/Gaps.** The GitHub repo README says `CC0 1.0 Universal (CC0-1.0)`; the documentation page says `CC BY-NC-SA 4.0`. The DCMLab distant_listening_corpus (sibling repo) is CC BY-NC-SA 4.0, so the CC0 claim on the Bach chorales repo looks anomalous \u2014 possibly a copy-paste error from a generic README template, or possibly intentional for the chorales specifically. Need orchestrator decision before adopting.",
+      "description": "500 Bach chorales (4-part SATB) in TSV, MusicXML, Humdrum kern, and MuseScore formats. Includes notes, measures, chords, harmonic labels. The original Bach works are public domain; the encoding is the question.",
+      "fit": "Best-in-class symbolic ground truth: 500 SATB chorales with multiple annotation facets. The pipeline's music21 + Verovio stack is purpose-built for this kind of data. Limitation: **the audio is not provided** \u2014 these are symbolic scores only. You would need a separate synthesizer (or a YAMAHA Disklavier, in your dreams) to turn the MusicXML into audio. So this is a ground-truth source, not an audio+ground-truth source. Also the license discrepancy above.",
+      "verified": "2026-08-01 \u2014 both the dcmlab.github.io page and the GitHub README were fetched; the conflict is real."
+    },
+    {
+      "category": "eval",
+      "name": "music21 corpus",
+      "url": null,
+      "license": "**Mixed, per composition** \u2014 music21's \"Authors, Acknowledgments\" page states: *\"the music (if not the encodings) in the corpus are either out of copyright in the United States and/or are licensed for non-commercial use... Some encodings included in the corpus may not be used for commercial uses or have other restrictions.\"* No blanket license \u2014 you must check the per-work README in the corpus tree.",
+      "description": "Built-in corpus shipped with `music21` (already in the pipeline's `trusted_packages.txt` stack). Includes the complete Bach chorales, many Haydn/Beethoven string quartets, three books of Monteverdi madrigals, thousands of folk songs (Essen, ABC). All encoded in MusicXML / Humdrum / MuseScore.",
+      "fit": "Zero install overhead (it's already in the project) and the works themselves are mostly PD (Bach chorales pre-1929; Beethoven quartets; etc.). Limitation: per-work license check is required; some encodings are NC. Also no audio.",
+      "verified": "2026-08-01 \u2014 music21 docs site reachable, licensing section quoted."
+    },
+    {
+      "category": "eval",
+      "name": "Lakh MIDI Dataset v0.1",
+      "url": "https://colinraffel.com/projects/lmd/",
+      "license": "**CC-BY 4.0** (confirmed on Colin Raffel's project page and on the MusPy loader metadata: `_LICENSE = \"Creative Commons Attribution 4.0 International License (CC-By 4.0)\"`)",
+      "description": "176,581 unique MIDI files (LMD-full), 45,129 of which are matched to Million Song Dataset entries (LMD-matched). LMD-aligned is a 272 MB subset pre-aligned to MSD. Multi-instrument, multi-genre, no audio.",
+      "fit": "Massive scale \u2014 176k files = essentially unlimited symbolic ground truth. The `lmd_aligned` subset is the practical entry point. Limitation: **no audio** \u2014 these are MIDI files only. To build an audio+ground-truth eval you'd need to synthesize (Slakh is exactly this \u2014 Slakh is the audio rendering of a subset of LMD). LMD-full contains corrupt files; the `_clean` subset is safer.",
+      "verified": "2026-08-01 \u2014 Colin Raffel project page and MusPy `lmd.py` source both confirm CC-BY 4.0."
+    },
+    {
+      "category": "eval",
+      "name": "Groove MIDI Dataset / E-GMD",
+      "url": null,
+      "license": "**CC-BY 4.0** for both GMD and E-GMD (verified on both Magenta pages)",
+      "description": "GMD: 13.6 h / 1,150 MIDI files of human-played drum performances on a Roland TD-11 V-Drum, with synthesized audio. E-GMD: 444 h, 43 drum kits, on Roland TD-17.",
+      "fit": "Best-in-class drum transcription ground truth. Use as the \"drums\" stratum of a multi-instrument eval (combine with Slakh stems for the harmonic content). Limitation: **drums only** \u2014 not a general multi-instrument source. The 22,000 drum measures in GMD give plenty of eval material; E-GMD's 444 h is overkill for a quarterly eval.",
+      "verified": "2026-08-01."
+    },
+    {
+      "category": "eval",
+      "name": "International Music Score Library Project (IMSLP / Petrucci)",
+      "url": "https://imslp.org/",
+      "license": "**Mixed, per work.** Per-work license is shown on every score page. Generally: scores are public domain for composers who died before 1972 (Canada jurisdiction) / 1955 (EU) / 1975 (Taiwan); recordings have separate copyright and many are *not* PD. *For a non-PD score, IMSLP requires the copyright holder's permission before upload.* Site content is CC-BY 4.0 (re3data).",
+      "description": "869,000+ scores, 94,000+ recordings, 27,000+ composers, 258,000+ works. The de-facto public-domain classical score library. Has MIDI for many works in the user-uploaded score collection.",
+      "fit": "Vast and the works are PD where composers are pre-1929-dead, which is most of the standard classical repertoire. Limitation: license check is per-page; *recordings* on IMSLP are NOT generally PD; for AMT you really want the recording, not just the score. So IMSLP is best used as a score-side resource to pair with separately-sourced audio.",
+      "verified": "2026-08-01 \u2014 IMSLP main page and \"Copyright Made Simple\" page both fetched; ruleset confirmed."
+    },
+    {
+      "category": "eval",
+      "name": "Dagstuhl ChoirSet",
+      "url": null,
+      "license": "**CC-BY 4.0** (per mirdata 1.0.0 quick reference, which fetches from the dataset's own Zenodo record)",
+      "description": "108 multitrack choral pieces with aligned audio, F0, beats, and notes. 4-part (SATB) and 8-part arrangements. Synthesized via a singing-voice synthesizer, not real human singers.",
+      "fit": "Choral, not general \"multi-instrument\" \u2014 but a great match if the pipeline ever extends to vocal ensemble. Limitation: synthesized audio; not a true cross-genre test.",
+      "verified": "2026-08-01 \u2014 mirdata quick-reference fetched and cross-checked."
+    },
+    {
+      "category": "eval",
+      "name": "Aria-MIDI",
+      "url": "https://github.com/loubbrad/aria-midi",
+      "license": "Per the arXiv paper (Bradshaw et al., 2025) and the GitHub repo, Aria-MIDI itself is **research use; check repo LICENSE for redistribution rights**. The arXiv paper says over 1 million distinct MIDI files totaling ~100,000 hours of transcribed audio.",
+      "description": "1,186,253 MIDI files, ~100,629 h, derived from audio via AMT (Lakh is one input). Largest MIDI collection to date.",
+      "fit": "Scale is unmatched. Limitation: derived from AMT, so the MIDI is itself the output of a transcription model \u2014 using AMT-derived MIDI as AMT ground truth is somewhat circular; you'd be measuring transcription-vs-transcription rather than transcription-vs-human. License is less clear than CC-BY; need orchestrator sign-off.",
+      "verified": "2026-08-01 \u2014 arXiv abstract and GitHub repo both fetched."
+    },
+    {
+      "category": "eval",
+      "name": "For the 30-second monthly test excerpt",
+      "url": null,
+      "license": null,
+      "description": null,
+      "fit": null,
+      "verified": null
+    },
+    {
+      "category": "eval",
+      "name": "For the 50-100 piece quarterly eval",
+      "url": null,
+      "license": null,
+      "description": null,
+      "fit": null,
+      "verified": null
+    }
+  ],
+  "rec_test": "MusicNet is the recommended pick, with URMP as a real-perf supplement and Slakh2100 as the synthesized-eval supplement.",
+  "rec_eval": "Slakh2100 is the recommended pick, paired with URMP for the real-perf strata and DCMLab Bach Chorales (subject to license-conflict resolution) as a MusicXML-symbolic anchor.",
+  "risks": "1. **DCMLab Bach Chorales license conflict (HIGH).** The `DCMLab/bach_chorales` GitHub README says `CC0 1.0 Universal` but the project's own documentation site says `CC BY-NC-SA 4.0`. This needs human resolution before adoption; do not assume CC0 from the README alone. Cross-checking the sibling `distant_listening_corpus` repo (CC BY-NC-SA 4.0) suggests CC0 on the chorales repo is likely a README template error, but the team should confirm. The Bach works themselves are PD, so the issue is the encoding, not the underlying music.\n\n2. **MAESTRO is CC BY-NC-SA 4.0 (NC clause).** Cannot be used as a published eval set if the pipeline or its outputs are commercial. The non-commercial share-alike clause is also sticky. Recommendation: use MAESTRO for internal R&D only, not as a quarterly-eval holdout.\n\n3. **MAPS license is the French 2.0 variant of BY-NC-SA (CC BY-NC-SA 2.0 FR).** The French-jurisdiction CC variant differs in legal detail from the international 4.0. Same NC concern as MAESTRO.\n\n4. **Freesound per-clip license must be re-checked on every download.** A previous \"CC0\" result does not guarantee the next result is CC0. The CI must filter by license field at fetch time, not at request time. There is no bulk CSV of \"all CC0 sounds\" \u2014 you have to query the API with `license:\"Creative Commons 0\"`.\n\n5. **Musopen has a 5-downloads/day throttle for free users.** CI automation either needs a paid seat ($55/yr) or a pre-staged local cache. Alternative: use the Internet Archive's \"Musopen Lossless DVD\" mirror, which is `Public Domain Mark 1.0` on the archive item itself.\n\n6. **Aria-MIDI license is not clearly CC.** The arXiv paper is the primary source; the GitHub repo's LICENSE file is what governs redistribution. Flag for orchestrator.\n\n7. **Slakh2100 has documented MIDI duplicates across train/test/val in the *original* release.** The Zenodo \"redux\" version moves them to an `omitted/` directory. **The `omitted/` directory must NOT be used as eval data** \u2014 the dataset's own documentation says so explicitly.\n\n8. **MusicNet labels are ~4% inaccurate** (per the dataset paper). This is a baseline noise floor; any eval that tries to micro-benchmark transcription accuracy below ~4% will be measuring label noise rather than model improvement.\n\n9. **CocoChorales is 2.9 TB.** The \"tiny\" subset (24k train + 8k val + 8k test) is the only practical entry point. Full download is not realistic for a quarterly budget; the 569 GB main_dataset is the floor if you want full coverage.\n\n10. **The orchestrator should confirm commercial-use posture before adopting this report.** Almost every recommendation here is CC-BY or CC0, which is fine, but two sources (MAESTRO, MAPS) are CC BY-NC-SA and would be disqualified under a commercial-use constraint. The pipeline AGENTS.md does not currently state a commercial-use policy.\n\n11. **No candidate offers a *single* dataset that is CC0, multi-instrument, audio + MIDI/MusicXML, and \u2265100 pieces.** Slakh2100 is closest (CC-BY 4.0, audio + MIDI, 2,100 pieces) but is CC-BY not CC0, and is synthesized. CC0 + audio + multi-instrument + MIDI is not currently available in any dataset the survey turned up. Worth flagging in the foundation report.\n\n---",
+  "sources_section": "- MusicNet (Zenodo): https://zenodo.org/records/5120004\n- MAESTRO: https://magenta.withgoogle.com/datasets/maestro\n- MIR-1K (Figshare mirror): https://figshare.com/articles/dataset/MIR-1K_rar/5802891\n- Lakh MIDI: https://colinraffel.com/projects/lmd/\n- MAPS (Zenodo mirror): https://zenodo.org/records/18160555\n- Slakh2100 (Zenodo): https://zenodo.org/records/4599666\n- URMP: https://labsites.rochester.edu/air/projects/URMP.html\n- CocoChorales: https://magenta.withgoogle.com/datasets/cocochorales\n- DCMLab Bach Chorales (docs): https://dcmlab.github.io/bach_chorales/introduction ; (repo): https://github.com/DCMLab/bach_chorales\n- music21 corpus: https://music21.org/music21docs/moduleReference/moduleCorpus.html\n- Groove MIDI: https://magenta.withgoogle.com/datasets/groove\n- E-GMD: https://magenta.withgoogle.com/datasets/e-gmd\n- Freesound: https://freesound.org/\n- Musopen: https://musopen.org/\n- IMSLP: https://imslp.org/\n- mirdata quick-reference: https://mirdata.readthedocs.io/en/latest/source/quick_reference.html\n- Aria-MIDI: https://github.com/loubbrad/aria-midi"
+}

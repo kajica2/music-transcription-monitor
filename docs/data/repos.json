@@ -1,0 +1,132 @@
+{
+  "repos": [
+    {
+      "name": "langchain-ai/langgraph",
+      "stars": "38.6k",
+      "forks": "6.5k",
+      "license": "MIT",
+      "release": "v1.2.5",
+      "release_date": "2026-06-12 (~7 wks ago)",
+      "status": "**Active**",
+      "notes": "",
+      "url": "https://github.com/langchain-ai/langgraph",
+      "details": [
+        "Notable changes since 1.2.4:",
+        "Cadence: 56 pages of releases. The 1.2.x line is stable; expect 1.3 in late summer 2026.",
+        "Implication: Active, well-maintained. The ty migration is the most consequential change \u2014 it signals the project is betting on Astral's tooling and may deprecate some mypy-only patterns downstream."
+      ]
+    },
+    {
+      "name": "crewAIInc/crewAI",
+      "stars": "56.5k",
+      "forks": "8.0k",
+      "license": "MIT",
+      "release": "v1.15.3a2` (alpha)",
+      "release_date": "2026-07-16 (~2 wks ago)",
+      "status": "**Active**",
+      "notes": "",
+      "url": "https://github.com/crewAIInc/crewAI",
+      "details": [
+        "Changes in 1.15.3a2:",
+        "Cadence: 23 pages of releases. v1.15.x is currently the active line; 1.15.3a2 is an alpha (the a2 suffix confirms pre-release). Expect a stable 1.15.3 shortly.",
+        "Implication: Active. The setuptools bump is non-trivial \u2014 anyone pinned to old setuptools in their env will need to update. The kickoff/OUTPUT hook fix is a correctness improvement for production crews.",
+        "omnizart/omnizart repo is no longer reachable \u2014 first 404 we've hit on this watchlist.",
+        "LangGraph's switch from mypy to Astral ty is the most consequential non-feature change across all monitored repos.",
+        "Basic-pitch is functionally abandoned on the public repo (3+ years without a release) \u2014 anyone building a real product on it should fork.",
+        "All release tags and dates were extracted from the Releases pages on github.com. Where a repo has no Releases tab, this is noted explicitly.",
+        "omnizart/omnizart 404 was reproduced on both the repo URL and /commits URL \u2014 consistent with deletion/rename, not a transient network failure.",
+        "HTML was extracted by the local web_fetch tool on 2026-08-01; release dates use GitHub's <relative-time> display (UTC).",
+        "Star/fork counts are point-in-time snapshots; not historical."
+      ]
+    },
+    {
+      "name": "facebookresearch/demucs",
+      "stars": "10.4k",
+      "forks": "1.6k",
+      "license": "MIT",
+      "release": "*(no formal releases)*",
+      "release_date": "n/a",
+      "status": "Active (no GH releases)",
+      "notes": "",
+      "url": "https://github.com/facebookresearch/demucs",
+      "details": [
+        "Recent activity: README and codebase reference the MDX21 / Hybrid Transformer architecture; the repo's primary recent artifact is the mdx21_demucs MDX-Challenge submission, indicating the team is pushing model improvements through checkpoints rather than versioned releases.",
+        "Notable: Despite the lack of formal releases, this is the de-facto standard for music source separation and continues to be referenced in 2026 papers."
+      ]
+    },
+    {
+      "name": "spotify/basic-pitch",
+      "stars": "5.4k",
+      "forks": "486",
+      "license": "Apache-2.0",
+      "release": "v0.2.4",
+      "release_date": "2023-04-10",
+      "status": "**Dormant**",
+      "notes": "",
+      "url": "https://github.com/spotify/basic-pitch",
+      "details": [
+        "Implication for our monitor: The TS/Python audio-to-MIDI pipeline is stable but Spotify has effectively stopped updating the public release. If we depend on it, we should pin v0.2.4 and not expect upstream fixes. Consider forking if active development is needed."
+      ]
+    },
+    {
+      "name": "cuthbertLab/music21",
+      "stars": "2.5k",
+      "forks": "450",
+      "license": "BSD-3-Clause",
+      "release": "v10` (per README)",
+      "release_date": "2026 (date unspec.)",
+      "status": "Active (research cadence)",
+      "notes": "",
+      "url": "https://github.com/cuthbertLab/music21",
+      "details": [
+        "Latest release: README explicitly references \"v10\" as of 2026: \"These detailed explanations of the license were moved to this README.md file in 2026 (v10) and out of LICENSE, music21/LICENSE and music21/license.txt in order to make the music21 license more parsable by tooling.\"",
+        "Notable: License clarification (BSD-3-Clause is unchanged; the README move is not a relicensing)."
+      ]
+    },
+    {
+      "name": "bytedance/piano_transcription",
+      "stars": "2.0k",
+      "forks": "253",
+      "license": "Apache-2.0",
+      "release": "*(no releases listed)*",
+      "release_date": "unknown",
+      "status": "Quiet",
+      "notes": "",
+      "url": "https://github.com/bytedance/piano_transcription",
+      "details": [
+        "Implication: Treat as a stable pretrained model download, not a library to update."
+      ]
+    },
+    {
+      "name": "magenta/mt3",
+      "stars": "1.7k",
+      "forks": "221",
+      "license": "Apache-2.0",
+      "release": "*(no releases listed)*",
+      "release_date": "unknown",
+      "status": "Quiet",
+      "notes": "",
+      "url": "https://github.com/magenta/mt3",
+      "details": [
+        "Implication: If we're building a transcription pipeline, MT3 is a research artifact, not a maintained library. Newer T5-based alternatives (e.g. lcm-lc/lightning style wrappers) are likely a better investment."
+      ]
+    },
+    {
+      "name": "omnizart/omnizart",
+      "stars": "n/a",
+      "forks": "n/a",
+      "license": "n/a",
+      "release": "n/a",
+      "release_date": "n/a",
+      "status": "**404 / moved**",
+      "notes": "",
+      "url": "https://github.com/omnizart/omnizart",
+      "details": [
+        "Fallback action: Check the org page https://github.com/omnizart and the PyPI package omnizart (which still resolves to a project by the same author, Tsung-Ping Chen, now at mctalk-authoring-tools org). Recommend de-listing from our monitor or replacing with the active fork.",
+        "Implication for our monitor: This is a regression vs. previous weeks. Update the watchlist."
+      ]
+    }
+  ],
+  "hot_take": "Ordered by *impact on a music-transcription agent pipeline*:\n\n1. **`langchain-ai/langgraph` v1.2.5** \u2014 Highly relevant. The `updateState` / `deltaChannel` fix and the `ty` migration are real engineering signals. If our agent orchestration is on LangGraph, upgrade promptly.\n2. **`crewAIInc/crewAI` v1.15.3a2** \u2014 Relevant. The `kickoff-completed` \u2194 `OUTPUT` hook bug fix is the kind of issue that would silently corrupt audit logs in production. PYSEC-2026-3447 setuptools bump is mandatory.\n3. **`cuthbertLab/music21` v10 (2026)** \u2014 Moderate. License-clarity reorg, no API break, but confirms the project is still maintained by Cuthbert. Safe to upgrade.\n4. **`facebookresearch/demucs`** \u2014 Moderate. No formal release, but model checkpoints continue to flow. Pin to a known checkpoint hash rather than `main`.\n5. **`spotify/basic-pitch` v0.2.4 (2023-04-10)** \u2014 **Dormant.** 3+ years since last release. Treat as frozen; do not expect upstream fixes.\n6. **`magenta/mt3`** \u2014 Quiet. Research artifact, not a maintained library. Re-evaluate as a dependency.\n7. **`bytedance/piano_transcription`** \u2014 Quiet. Stable pretrained model; no library churn.\n8. **`omnizart/omnizart`** \u2014 **Gone (404).** Remove from our watchlist or substitute with the active PyPI package / `mctalk-authoring-tools` org fork.\n\n**Biggest surprises this week:**\n- `omnizart/omnizart` repo is **no longer reachable** \u2014 first 404 we've hit on this watchlist.\n- LangGraph's switch from mypy to Astral `ty` is the most consequential non-feature change across all monitored repos.\n- Basic-pitch is functionally abandoned on the public repo (3+ years without a release) \u2014 anyone building a real product on it should fork.\n\n---",
+  "caveats": "- All release tags and dates were extracted from the `Releases` pages on `github.com`. Where a repo has no Releases tab, this is noted explicitly.\n- `omnizart/omnizart` 404 was reproduced on both the repo URL and `/commits` URL \u2014 consistent with deletion/rename, not a transient network failure.\n- HTML was extracted by the local `web_fetch` tool on 2026-08-01; release dates use GitHub's `<relative-time>` display (UTC).\n- Star/fork counts are point-in-time snapshots; not historical."
+}

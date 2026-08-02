@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Agentic Music Transcription Monitor — Hub</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237dd3c0'/%3E%3Ctext x='50' y='72' font-size='72' font-family='ui-monospace,monospace' font-weight='700' text-anchor='middle' fill='%230a0b10'%3EM%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="shared/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <div class="brand">
+          <div class="brand__mark" aria-hidden="true">M</div>
+          <div class="brand__text">
+            <h1>Agentic Music Transcription Monitor</h1>
+            <p id="date-subtitle">—</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <nav class="nav" aria-label="Primary">
+            <a class="nav__link" href="index.html">Hub</a>
+            <a class="nav__link" href="arxiv.html">arXiv</a>
+            <a class="nav__link" href="github.html">GitHub</a>
+            <a class="nav__link" href="assets.html">Assets</a>
+            <a class="nav__link" href="links.html">Links</a>
+            <a class="nav__link" href="tester.html">Tester</a>
+          </nav>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+            <span id="theme-label">Theme</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- =====================================================
+           Hub
+           ===================================================== -->
+      <section aria-labelledby="hub-title">
+        <div class="section-head">
+          <div>
+            <p class="section-eyebrow">Hub</p>
+            <h2 id="hub-title" class="section-title">Pick a report or tool</h2>
+          </div>
+          <p class="section-meta">v0.2 · interactive</p>
+        </div>
+
+        <div class="grid grid--hub">
+          <a class="card" href="arxiv.html" style="text-decoration: none;">
+            <div class="card__head">
+              <div>
+                <p class="card__step">02 / Weekly</p>
+                <h3 class="card__title">arXiv Report</h3>
+                <p class="card__sub">AMT × LLM/Agent/Foundation Model</p>
+              </div>
+              <span class="pill pill--ok">10 papers</span>
+            </div>
+            <p class="card__desc">This week's most relevant papers combining Automatic Music Transcription with LLMs, agents, or foundation models. Clickable arXiv links, code repos, and a Copy Prompt button to re-run the agent.</p>
+            <div class="card__row">
+              <span class="card__label">Hot take</span>
+              <span class="card__value">MuScriptor</span>
+            </div>
+            <span class="card__link">Open arXiv report</span>
+          </a>
+
+          <a class="card" href="github.html" style="text-decoration: none;">
+            <div class="card__head">
+              <div>
+                <p class="card__step">03 / Monthly</p>
+                <h3 class="card__title">GitHub Pulse</h3>
+                <p class="card__sub">Core repos + agent frameworks</p>
+              </div>
+              <span class="pill pill--warn">1 watch</span>
+            </div>
+            <p class="card__desc">Recent activity across Demucs, Basic Pitch, MT3, music21, LangGraph, crewAI. Stars, latest releases, breaking changes. 1 repo gone (omnizart) and 1 dormant (basic-pitch).</p>
+            <div class="card__row">
+              <span class="card__label">Status</span>
+              <span class="card__value">8/8 attempted</span>
+            </div>
+            <span class="card__link">Open GitHub report</span>
+          </a>
+
+          <a class="card" href="assets.html" style="text-decoration: none;">
+            <div class="card__head">
+              <div>
+                <p class="card__step">04 / Foundation</p>
+                <h3 class="card__title">Asset Research</h3>
+                <p class="card__sub">Test audio + eval sets</p>
+              </div>
+              <span class="pill pill--ok">21 sources</span>
+            </div>
+            <p class="card__desc">CC-licensed test excerpts (30-second) and eval sets (50-100 pieces) for the pipeline. License verification on every source — NC flags called out.</p>
+            <div class="card__row">
+              <span class="card__label">Recommended</span>
+              <span class="card__value">MusicNet + Slakh2100</span>
+            </div>
+            <span class="card__link">Open Assets report</span>
+          </a>
+
+          <a class="card" href="links.html" style="text-decoration: none;">
+            <div class="card__head">
+              <div>
+                <p class="card__step">All Reports</p>
+                <h3 class="card__title">Total Links</h3>
+                <p class="card__sub">Every URL aggregated</p>
+              </div>
+              <span class="pill pill--pending">28 links</span>
+            </div>
+            <p class="card__desc">Every clickable link from every report, in one searchable page. Filter by title, source, or URL. Handy when you want to drop a batch into your browser tabs.</p>
+            <div class="card__row">
+              <span class="card__label">Filterable</span>
+              <span class="card__value">Yes</span>
+            </div>
+            <span class="card__link">Open Links page</span>
+          </a>
+
+          <a class="card" href="tester.html" style="text-decoration: none;">
+            <div class="card__head">
+              <div>
+                <p class="card__step">Tool</p>
+                <h3 class="card__title">Solo Transcription Tester</h3>
+                <p class="card__sub">Audio → notes → arrangement</p>
+              </div>
+              <span class="pill pill--ok">Browser</span>
+            </div>
+            <p class="card__desc">Upload a solo instrument audio (or use a built-in sample) and the browser does monophonic pitch detection. Generates a multi-instrument description (key, range, suggested arrangement) from the detected notes.</p>
+            <div class="card__row">
+              <span class="card__label">Engine</span>
+              <span class="card__value">Web Audio + ACF2+</span>
+            </div>
+            <span class="card__link">Open Tester</span>
+          </a>
+
+          <div class="card" style="background: var(--code-bg);">
+            <div class="card__head">
+              <div>
+                <p class="card__step">Project</p>
+                <h3 class="card__title">About this dashboard</h3>
+              </div>
+            </div>
+            <p class="card__desc">Built by the music-transcription-monitor swarm. Each report has a <strong>Copy full prompt</strong> button — paste it into the agent to re-run the same sweep on a different date.</p>
+            <p class="card__desc" style="font-size: var(--fs-xs);">To regenerate after the next swarm cycle, run <code>python3 setup/build_dashboard.py</code>.</p>
+            <div class="card__row">
+              <span class="card__label">Status</span>
+              <span class="card__value">v0.2 · interactive</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           Pipeline Stages (kept from v0.1 for reference)
+           ===================================================== -->
+      <section class="pipeline" aria-labelledby="pipeline-title">
+        <div class="section-head">
+          <div>
+            <p class="section-eyebrow">01 / Pipeline</p>
+            <h2 id="pipeline-title" class="section-title">Pipeline Stages</h2>
+          </div>
+          <p class="section-meta">4 stages · idle</p>
+        </div>
+        <div class="pipeline-grid">
+          <article class="card">
+            <div class="card__head">
+              <div>
+                <p class="card__step">Stage 1</p>
+                <h3 class="card__title">Demucs</h3>
+                <p class="card__sub">Source Separation</p>
+              </div>
+              <span class="pill pill--pending">Not run</span>
+            </div>
+            <p class="card__desc">Split mixed audio into vocal, drums, bass, and other stems via Meta's hybrid Transformer.</p>
+            <div class="card__row">
+              <span class="card__label">Last run</span>
+              <span class="card__value">—</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__head">
+              <div>
+                <p class="card__step">Stage 2</p>
+                <h3 class="card__title">Basic Pitch</h3>
+                <p class="card__sub">Audio → MIDI</p>
+              </div>
+              <span class="pill pill--pending">Not run</span>
+            </div>
+            <p class="card__desc">Spotify's lightweight CNN+GRU transcriber emits note events and pitch contours.</p>
+            <div class="card__row">
+              <span class="card__label">Last run</span>
+              <span class="card__value">—</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__head">
+              <div>
+                <p class="card__step">Stage 3</p>
+                <h3 class="card__title">music21</h3>
+                <p class="card__sub">Cleanup &amp; Analysis</p>
+              </div>
+              <span class="pill pill--pending">Not run</span>
+            </div>
+            <p class="card__desc">Python toolkit for quantization, key detection, voice leading, and MusicXML round-trip.</p>
+            <div class="card__row">
+              <span class="card__label">Last run</span>
+              <span class="card__value">—</span>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card__head">
+              <div>
+                <p class="card__step">Stage 4</p>
+                <h3 class="card__title">MuseScore / Verovio</h3>
+                <p class="card__sub">Engraving</p>
+              </div>
+              <span class="pill pill--pending">Not run</span>
+            </div>
+            <p class="card__desc">Render the cleaned score to SVG / PNG with MEI notation and per-system layout.</p>
+            <div class="card__row">
+              <span class="card__label">Last run</span>
+              <span class="card__value">—</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="actions">
+          <h3 class="actions__title">📋 Next Actions</h3>
+          <ul class="actions__list">
+            <li class="actions__item">
+              <span class="actions__marker">1</span>
+              <span><strong>Approve adding MuScriptor</strong> <span class="dim">to the audio→MIDI stage (replaces basic-pitch in the monthly pipeline). Add <code>muscriptor</code> to <code>trusted_packages.txt</code>.</span></span>
+            </li>
+            <li class="actions__item">
+              <span class="actions__marker">2</span>
+              <span><strong>Drop omnizart from the watchlist</strong> <span class="dim">(404) and add <code>muscriptor/muscriptor</code> in its place for the next weekly pulse.</span></span>
+            </li>
+            <li class="actions__item">
+              <span class="actions__marker">3</span>
+              <span><strong>Download one MusicNet 30s clip</strong> <span class="dim">into <code>assets/test_audio/</code> for the August monthly rebuild (CC-BY 4.0, attribution to Zenodo record 5120004).</span></span>
+            </li>
+            <li class="actions__item">
+              <span class="actions__marker">4</span>
+              <span><strong>Resolve the DCMLab + Aria-MIDI license questions</strong> <span class="dim">before any quarterly eval is run.</span></span>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>music-transcription-monitor</span>
+      <span><span class="dot">·</span>dashboard v0.2<span class="dot">·</span><span id="footer-date">—</span></span>
+    </footer>
+  </div>
+  <script src="shared/app.js"></script>
+</body>
+</html>

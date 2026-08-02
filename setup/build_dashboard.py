@@ -777,6 +777,8 @@ def main() -> int:
                         help=f"Directory containing weekly_*.md / asset_research_*.md (default: {REPORTS_DIR})")
     parser.add_argument("--dashboard-dir", default=str(DASHBOARD_DIR),
                         help=f"Directory to write HTML pages into (default: {DASHBOARD_DIR})")
+    parser.add_argument("--gh-pages-dir", default=str(PROJECT_DIR / "docs"),
+                        help="Directory to mirror dashboard/* into for GitHub Pages (default: <project>/docs). Pass '' to disable.")
     args = parser.parse_args()
 
     reports_dir = Path(args.reports_dir)
@@ -836,6 +838,36 @@ def main() -> int:
     (dashboard_dir / "assets.html").write_text(render_assets(asset_data), encoding="utf-8")
     print(f"[INFO] writing links.html  ({len(all_links)} links)")
     (dashboard_dir / "links.html").write_text(render_links(all_links), encoding="utf-8")
+
+    # Mirror to GitHub Pages target (defaults to ./docs). Skips index.html
+    # (the hand-edited hub) and tester.html (the hand-edited tool).
+    gh_dir = args.gh_pages_dir
+    if gh_dir:
+        gh_path = Path(gh_dir)
+        gh_path.mkdir(parents=True, exist_ok=True)
+        # Touch .nojekyll so GitHub Pages doesn't try to process us as Jekyll
+        (gh_path / ".nojekyll").touch(exist_ok=True)
+        # Copy the 4 generated report pages
+        for name in ("arxiv.html", "github.html", "assets.html", "links.html"):
+            src = dashboard_dir / name
+            dst = gh_path / name
+            dst.write_bytes(src.read_bytes())
+        # Copy hand-edited hub + tester if present
+        for name in ("index.html", "tester.html"):
+            src = dashboard_dir / name
+            if src.exists():
+                dst = gh_path / name
+                dst.write_bytes(src.read_bytes())
+        # Copy shared/ + data/ so the relative links work on Pages
+        import shutil
+        for sub in ("shared", "data"):
+            src_dir = dashboard_dir / sub
+            dst_dir = gh_path / sub
+            if src_dir.exists():
+                if dst_dir.exists():
+                    shutil.rmtree(dst_dir)
+                shutil.copytree(src_dir, dst_dir)
+        print(f"[INFO] mirrored to {gh_path} (GitHub Pages source)")
 
     print(f"[DONE] dashboard rebuilt at {dashboard_dir}")
     print(f"  arxiv.html, github.html, assets.html, links.html")
