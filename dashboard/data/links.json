@@ -6,7 +6,17 @@
   },
   {
     "source": "arXiv",
-    "title": "MuseAgent-1 \u2014 Multimodal Agent for Music Scores + Performance Audio",
+    "title": "Qwen-Music Technical Report (Qwen Team, 2026) \u2014 *NEW THIS WEEK (v2)*",
+    "url": "https://arxiv.org/abs/2607.11699"
+  },
+  {
+    "source": "arXiv",
+    "title": "MulTTiPop \u2014 Multitrack Transcription Dataset for Pop Music (Pruyne et al., 2026) \u2014 *NEW THIS WEEK*",
+    "url": "https://arxiv.org/abs/2607.08756"
+  },
+  {
+    "source": "arXiv",
+    "title": "MuseAgent-1 \u2014 Interactive Grounded Multimodal Understanding of Music Scores + Performance Audio",
     "url": "https://arxiv.org/abs/2601.11968"
   },
   {
@@ -16,17 +26,17 @@
   },
   {
     "source": "arXiv",
-    "title": "Libretto \u2014 Symbolic Music for LLM Agents",
-    "url": "https://arxiv.org/abs/2606.22708"
-  },
-  {
-    "source": "arXiv",
     "title": "Text2Score \u2014 Sheet-Music Generation with an LLM Planner",
     "url": "https://arxiv.org/abs/2605.13431"
   },
   {
     "source": "arXiv",
-    "title": "HeartMuLa \u2014 Open-Source Music Foundation Model Family",
+    "title": "Libretto \u2014 Symbolic Music for LLM Agents",
+    "url": "https://arxiv.org/abs/2606.22708"
+  },
+  {
+    "source": "arXiv",
+    "title": "HeartMuLa v3 \u2014 Open-Source Music Foundation Model Family (Yang et al., 2026) \u2014 *v3 dropped 7 Jul 2026*",
     "url": "https://arxiv.org/abs/2601.10547"
   },
   {
@@ -36,18 +46,8 @@
   },
   {
     "source": "arXiv",
-    "title": "MuFun \u2014 Unified Foundation Model for Music Understanding",
-    "url": "https://arxiv.org/abs/2508.01178"
-  },
-  {
-    "source": "arXiv",
-    "title": "MuSViT \u2014 First Foundation Vision Model for Sheet Music",
-    "url": "https://arxiv.org/abs/2606.31811"
-  },
-  {
-    "source": "arXiv",
-    "title": "AMT-APC \u2014 Fine-Tuning an AMT Model for Piano Cover",
-    "url": "https://arxiv.org/abs/2409.14086"
+    "title": "\"Evaluating Multimodal Large Language Models on Core Music Perception Tasks\" (Carone, Roman, Ripoll\u00e9s, 2025) \u2014 *NEW THIS WEEK*",
+    "url": "https://arxiv.org/abs/2510.22455"
   },
   {
     "source": "GitHub",

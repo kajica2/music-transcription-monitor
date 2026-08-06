@@ -1,143 +1,94 @@
-# Music Transcription Monitor - Transcription App
+# Transcriber — Solo Instrument AMT
 
-This is a standalone web application for audio transcription and music notation visualization, designed to work as part of the Music Transcription Monitor project.
+Browser-only solo instrument automatic music transcription. No server, no external API calls.
 
 ## Features
 
-### Three-Panel Interface
-1. **Left Panel - File + Waveform**
-   - Drag & drop audio file support
-   - Waveform visualization using Wavesurfer.js
-   - Interactive region selection for segmenting audio
-   - Quality tagging (keeper/maybe/discard) for segments
-   - Export selected segments as individual WAV files
-   - Playback controls with play/pause/stop
+### Pitch Detection
+- **ACF2+ autocorrelation** with parabolic interpolation — runs entirely in the main thread via `requestAnimationFrame`, no Web Workers required
+- Adjustable **sensitivity** and **minimum note duration** sliders
+- Live Hz readout overlay on the waveform while recording from mic
 
-2. **Center Panel - Transcription Output**
-   - Real-time transcription display (simulated in this demo)
-   - Progress tracking for analysis processes
-   - Timestamped transcription segments
-   - Live mode toggle for continuous processing
+### Audio Sources
+- **File**: drag & drop or browse — any format the browser's Web Audio API can decode (MP3, WAV, OGG, FLAC, M4A, etc.)
+- **Microphone**: live real-time pitch detection loop — speak or play an instrument directly into the browser
 
-3. **Right Panel - Chart Preview**
-   - Live music notation rendering using VexFlow
-   - Export options:
-     - SVG (vector graphics)
-     - PDF (via html2canvas + jsPDF)
-     - MusicXML (placeholder for future implementation)
+### Notation
+- **VexFlow** renders detected pitches as standard music notation (treble clef, accidentals, beams)
+- Render controls: zoom, re-render from any note index, "Render" button
 
-## Technical Implementation
+### Exports (all browser-side)
+| Format | Notes |
+|--------|-------|
+| **SVG** | Vector notation — open in any vector editor |
+| **PDF** | Rasterized via html2canvas + jsPDF |
+| **MIDI** | Binary Standard MIDI File (Format 1) — 480 ticks/qtr, NoteOn/NoteOff events |
+| **MusicXML** | Valid Partwise 3.1 document — open in Dorico, Finale, MuseScore, LilyPond |
+| **WAV segments** | Per-region audio slices with quality tags |
 
-### Core Technologies
-- **Web Audio API** - Audio decoding and processing
-- **Wavesurfer.js** - Waveform visualization and interaction
-- **VexFlow** - Music notation rendering
-- **Web Workers** - Background processing for:
-  - Whisper speech-to-text (via transformers.js)
-  - pYIN pitch detection (using SharedArrayBuffer)
-  - madmom DBN beat tracking
-- **html2canvas + jsPDF** - PDF export functionality
+### Quality Tagging
+Each region can be marked **Keeper / Maybe / Discard** with color-coded segments. Export WAV only the segments you want.
 
-### Processing Pipeline (Planned)
-1. **Audio Input** → File API → Web Audio API
-2. **Waveform Generation** → Wavesurfer.js visualization
-3. **Parallel Processing** (Web Workers):
-   - Speech-to-Text: Whisper via transformers.js
-   - Pitch Detection: pYIN algorithm
-   - Beat Tracking: madmom DBN
-4. **Notation Rendering** → VexFlow staff generation
-5. **Export Options** → SVG, PDF, MusicXML, WAV segments
+### Piano Roll
+Collapsible canvas visualization of all detected notes — time on X, pitch on Y, clarity-coded opacity. Click the header to expand/collapse.
+
+### Debug Log
+Every pitch detection event, note finalization, export action, and error is timestamped and displayed. Copy or clear the log at any time. Useful for understanding why a note was missed or an export failed.
+
+### Theme
+Dark/light toggle — inherits the MTM dashboard design tokens (teal accent). Theme preference is saved to `localStorage`.
+
+### Keyboard Shortcuts
+| Key | Action |
+|-----|--------|
+| `Space` | Play / Pause |
+| `M` | Toggle microphone |
+| `Esc` | Stop all |
+
+## File Layout
+```
+transcriber-app/
+├── index.html         # App shell
+├── css/style.css      # Full design system (dark/light, all components)
+├── js/main.js         # ACF pitch detection, VexFlow, MIDI, MusicXML, piano roll
+└── README.md          # This file
+```
 
 ## Usage
 
-### Development
-1. Clone the Music Transcription Monitor repository
-2. Navigate to `transcriber-app/` directory
-3. Open `index.html` in a modern browser (Chrome, Firefox, Safari, Edge)
-   OR
-4. Run a local server: `python3 -m http.server 8080`
-5. Visit `http://localhost:8080`
-
-### Features Currently Implemented
-- File drag & drop or browse selection
-- Waveform visualization with interactive regions
-- Playback controls (play/pause/stop)
-- Segment quality tagging
-- Segment export as WAV files
-- Basic UI layout with three panels
-- Placeholder transcription display
-- VexFlow notation container (ready for implementation)
-- Export buttons with SVG/PDF/MusicXML stubs
-
-### Features to Implement
-1. **Web Worker Setup**:
-   - Create workers for Whisper (transformers.js)
-   - Create workers for pYIN pitch detection
-   - Create workers for beat tracking (madmom DBN)
-   
-2. **Audio Processing Pipeline**:
-   - Connect Web Audio API output to workers
-   - Implement SharedArrayBuffer for pitch data sharing
-   - Process audio buffers in real-time chunks
-
-3. **Transcription Integration**:
-   - Display real-time Whisper transcription results
-   - Update segment text with recognized speech
-   - Handle streaming/partial results
-
-4. **Notation Generation**:
-   - Convert pitch/onset data to VexFlow notes
-   - Render evolving music notation in real-time
-   - Handle measure layout and line breaking
-
-5. **Export Functionality**:
-   - Implement actual SVG generation from VexFlow
-   - Complete PDF export with proper formatting
-   - Add MusicXML export using musicxml library
-   - Enhance WAV export with metadata
-
-## Project Structure
+Open directly in a browser:
 ```
-transcriber-app/
-├── index.html          # Main application interface
-├── css/
-│   └── style.css       # Styling for all components
-├── js/
-│   └── main.js         # Application logic and UI interactions
-└── README.md           # This file
+open transcriber-app/index.html
 ```
 
-## Browser Compatibility
-- Requires modern browser with support for:
-  - Web Audio API
-  - ES6 Modules
-  - Web Workers
-  - SharedArrayBuffer (requires HTTPS or localhost)
-  - Blob URLs and object URLs
-  - ES6 Promises and async/await
+Or serve locally:
+```bash
+cd transcriber-app && python3 -m http.server 8080
+# → http://localhost:8080
+```
 
-Tested with:
-- Chrome 109+
-- Firefox 108+
-- Safari 15+
-- Edge 109+
+## Architecture Notes
 
-## Integration with Music Transcription Monitor
-This application can be integrated into the main Music Transcription Monitor dashboard by:
-1. Placing it in the `dashboard/` directory
-2. Linking from the main dashboard interface
-3. Sharing data via localStorage or IndexedDB for persistence
-4. Using the same audio analysis pipelines as the main project
+### ACF Pitch Detection (`acfPitch`)
+1. Silence detection via RMS vs. sensitivity-adjusted threshold
+2. Normalized autocorrelation for lag ∈ [sampleRate/2000, sampleRate/60]
+3. First-peak detection (local max > neighbors) in ACF
+4. Parabolic interpolation (±0.5 bin refinement) for sub-bin accuracy
+5. Clarity = normalized ACF value at peak lag (0 = noise, 1 = perfectly periodic)
+6. Notes are **finalized** when pitch changes by >2.5% or clarity jumps >0.2
 
-## Future Enhancements
-- Real-time microphone input processing
-- Multi-track audio separation (using Demucs integration)
-- Advanced notation features (lyrics, dynamics, articulations)
-- Collaboration features (share/export projects)
-- Machine learning model selection (Whisper variants)
-- Customizable transcription parameters
-- Batch processing capabilities
+### MIDI File Format
+- **Format 1** (one tempo track + one note track)
+- 480 ticks per quarter note
+- NoteOn (0x90) / NoteOff (0x80) events, delta-VLQ encoded
+- Yields a valid `.mid` file openable in any DAW or notation app
 
----
-*Built as part of the Music Transcription Monitor project*
-*For more information, see the main repository: https://github.com/kajica2/music-transcription-monitor*
+### MusicXML
+- Partwise 3.1 — single `<measure>` with `<note>` elements
+- Duration in divisions (480/qtr note)
+- Pitch step + octave + optional alter for accidentals
+
+## Browser Requirements
+- Web Audio API (all modern browsers)
+- `navigator.mediaDevices.getUserMedia` for microphone (requires HTTPS or localhost)
+- ES6+ (modules not required — everything is a single IIFE bundle)

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="dark light" />
-  <title>arXiv Report — 2026-08-01 — Agentic Music Transcription Monitor</title>
+  <title>arXiv Report — 2026-08-02 — Agentic Music Transcription Monitor</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%237dd3c0'/%3E%3Ctext x='50' y='72' font-size='72' font-family='ui-monospace,monospace' font-weight='700' text-anchor='middle' fill='%230a0b10'%3EM%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="shared/styles.css" />
 </head>
@@ -51,19 +51,21 @@
           <p class="section-eyebrow">02 / Weekly</p>
           <h2 class="section-title">arXiv: AMT × LLM/Agent/Foundation Model</h2>
         </div>
-        <p class="section-meta">10 papers · generated 2026-08-01</p>
+        <p class="section-meta">10 papers · generated 2026-08-02</p>
       </div>
     </section>
     
 
     <div class="hot-take">
       <p class="hot-take__label">🔥 Hot Take</p>
-      <h3 class="hot-take__title">MuScriptor (arXiv:2607.08168) is the most impactful paper of the week, and arguably of the year for the AMT field. Three reasons:</h3>
-      <p class="hot-take__body">1. It's the first open-weight multi-instrument AMT model that actually works on real-world music. Previous "open" models either needed isolated stems (Basic Pitch, MT3 in single-instrument mode) or collapsed on genre transfer. MuScriptor's 170 k real-song training set + RL post-training closes a gap that has been open since Gardner et al. 2022.
-2. It applies the LLM-era playbook — large-scale pretraining → real-data fine-tuning → RL alignment — to AMT specifically. That three-stage recipe is the same one that made ChatGPT / Suno / HeartMuLa work, and applying it to AMT is the clearest sign that the symbolic-music subfield is going to converge with the generative-audio subfield in 2026–2027.
-3. It's reproducible today. pip install muscriptor, point it at a WAV, get a MIDI. For a swarm-tracking project, this is the first entry in months where the GitHub repo is the more important artifact than the paper.
-Honorable mention: VocalParse for showing the LALM path (Qwen3-ASR backbone + interleaved CoT) is competitive on singing transcription and ships with code. And MuseAgent-1 is the architecture-pattern paper to keep referencing when we design our own AMT-aware agent.
-The "AMT-as-token-prediction" paradigm won 2025/2026. The "AMT-as-LLM-tool-use" paradigm (MuseAgent, Libretto, Text2Score) is the one to watch for 2027.
+      <h3 class="hot-take__title">MuScriptor is still the most impactful paper of the year for AMT-as-AMT (the open release, the RL post-training, the 941-star adoption signal). But for this week specifically — and for the swarm's narrower lens of AMT × LLM/Agent/Foundation — the most consequential development is the closing of the AMT↔generation loop:</h3>
+      <p class="hot-take__body">> The Qwen team now uses Qwen3-ASR as a lyric-intelligibility metric for Qwen-Music — and VocalParse is the open fine-tune of Qwen3-ASR for SVT.
+In plain terms: the field's most-advanced song-generation FM has decided that the best way to know whether its generated lyrics are intelligible is to ask a singing-voice AMT model. VocalParse is the open-weights embodiment of that metric. The implication for any AMT-aware agent or pipeline is structural: the same model that scores generation quality also serves as the lyrics side of multi-track AMT. If you're building a music-aware LLM agent, your "lyrics" tool should be Qwen3-ASR (or VocalParse), your "audio→MIDI" tool should be MuScriptor, and your "score→symbolic" tool should be the MuseAgent-1 OMR module. That trio is the new de facto stack.
+Honorable mentions:
+- Carone, Roman, Ripollés (NeurIPS 2025 WS) is the cleanest articulation of why the AMT-front-end architecture (MuseAgent, VocalParse) exists at all. MLLMs reason over symbols at near-ceiling accuracy and over audio poorly. That's not a bug to fix; it's the architectural justification for the entire AMT-as-tool-use paradigm.
+- MulTTiPop at 38% best-case Onset F1 on commercial pop is the necessary counterweight to the MuScriptor hype. Both are right; both are needed.
+- Qwen-Music (v2) is the one to watch for adoption: a Suno-class open-weights model with a published tech report and a credible eval loop.
+The "AMT-as-token-prediction" paradigm won 2025/2026. The "AMT-as-LLM-tool-use" paradigm (MuseAgent, Libretto, Text2Score) is the one to watch for 2027. The new 2026-Q3 question is whether AMT-as-generation-eval-metric (Qwen-Music + VocalParse + Qwen3-ASR) becomes the dominant pattern.
 ---</p>
     </div>
     
@@ -125,13 +127,13 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
               <p class="paper__meta">
                 <span>arXiv:2607.08168</span>
                 <span>·</span>
-                <span>Submitted 9 Jul 2026</span>
+                <span>Submitted 9 Jul 2026 (v1, 160 KB)</span>
               </p>
             </div>
           </div>
           <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2607.08168" target="_blank" rel="noopener">arXiv:2607.08168</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> MuScriptor recasts multi-instrument AMT as autoregressive MIDI-token generation (MT3-style) over a decoder-only Transformer that reads a mel-spectrogram. The kicker is the third training stage: an RL pass over high-quality real data, plus optional conditioning on a known instrument set at inference time — that's the knob that lets one model transcribe "anything from classical to heavy metal." Reported multi-instrument F1 is 48.2 vs. 21.9 for YourMT3+ on the same eval.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Open weights + code released.** Code on GitHub: <https://github.com/muscriptor/muscriptor> (MIT inference code, CC BY-NC 4.0 weights). Three sizes (small ≈100 M, medium ≈300 M, large ≈1.3 B) on Hugging Face under the `MuScriptor/` org. `pip install muscriptor` works; a `uvx muscriptor serve` web UI is also documented.</p>
+          <p class="paper__summary"><strong>Summary:</strong> MuScriptor recasts multi-instrument AMT as autoregressive MIDI-token generation (MT3-style) over a decoder-only Transformer that reads a mel-spectrogram. The kicker is the third training stage: an RL pass over high-quality real data, plus optional conditioning on a known instrument set at inference time — that's the knob that lets one model transcribe "anything from classical to heavy metal." Reported multi-instrument F1 is 48.2 vs. 21.9 for YourMT3+ on the same eval. The released `muscriptor/muscriptor` repo has **941 stars, 122 forks** as of this cycle (verified via the GitHub repo page), making it the most-traction multi-instrument AMT release of the year.</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Open weights + code released.** Code: <https://github.com/muscriptor/muscriptor> (MIT). Weights on Hugging Face under the `MuScriptor/` org, CC BY-NC 4.0. Three sizes — small (≈103 M), medium (≈307 M), large (≈1.3 B) — plus a `uvx muscriptor serve` web UI (FastAPI + SpessaSynth + MuseScore General SF3). `muscriptor transcribe audio.wav -o out.mid --auralize check.wav` is the one-shot CLI. On the same eval split, the full three-stage pipeline gives 60.4 / 73.3 / 49.0 / 50.2 / 48.2 across Onset / Frame / Offset / Drums / Multi F1 vs. YourMT3+ at 32.5 / 45.5 / 17.8 / 41.4 / 21.9.</p>
           
         </article>
         
@@ -139,18 +141,18 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
         <article class="paper" id="paper-2">
           <div class="paper__head">
             <div>
-              <p class="paper__num">Paper #2 · Zhao et al., 2026</p>
-              <h3 class="paper__title">MuseAgent-1 — Multimodal Agent for Music Scores + Performance Audio</h3>
+              <p class="paper__num">Paper #2 · </p>
+              <h3 class="paper__title">Qwen-Music Technical Report (Qwen Team, 2026) — *NEW THIS WEEK (v2)*</h3>
               <p class="paper__meta">
-                <span>arXiv:2601.11968</span>
+                <span>arXiv:2607.11699</span>
                 <span>·</span>
-                <span>Submitted 17 Jan 2026</span>
+                <span>Submitted 13 Jul 2026 (v1) → **27 Jul 2026 (v2, this version)**, 5,311 KB</span>
               </p>
             </div>
           </div>
-          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2601.11968" target="_blank" rel="noopener">arXiv:2601.11968</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> MuseAgent is an *architecture-pattern* paper: stick a CQT-based AMT module (audio→MusicXML/JSON) and a measure-wise OMR module (sheet image→ABC) in front of an LLM, plus a retrieval layer over symbolic + audio libraries, and you get a system that can actually answer "what key is this passage modulating to?" — something stock MLLMs like Gemini-2.5-Pro routinely fail at. With GPT-4.1 as the orchestrator, MuseAgent hits 79.1% accuracy on the audio slice of MuseBench.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Partial.** The paper is a tech report and the underlying ICLR 2026 submission is at <https://openreview.net/forum?id=kDqH5KmRWR>. No first-party public GitHub repo linked from the abstract; the AMT and OMR modules themselves rely on existing baselines. Worth pinging the authors for a code drop.</p>
+          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2607.11699" target="_blank" rel="noopener">arXiv:2607.11699</a></p>
+          <p class="paper__summary"><strong>Summary:</strong> Qwen-Music is the **first closed/open-weights generation FM that uses an AMT-derived metric in its eval loop**: the lyrics-intelligibility of generated songs is scored with **Qwen3-ASR** (Shi et al. 2026) and reported as Phoneme Error Rate. That's the same LALM backbone that VocalParse is fine-tuned from — meaning the Qwen team is now treating Qwen3-ASR as a *de facto* lyrics-AMT benchmark. The 25 Hz single-codebook tokenizer is on the same frame-rate axis as HeartCodec, and the **Melody-CoT** trick (plan melodies, then generate the full semantic-token sequence) is the musical cousin of VocalParse's lyric-CoT. v2 is the more polished report — same headline numbers, refined evaluation methodology. The field's centre-of-gravity is now visibly migrating toward "AMT as in-loop eval of generation."</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Tech report; not a paper with code release.** A community Hugging Face port is expected but not yet linked from the abstract. The Qwen3-ASR backbone is itself open-weight and used here as a black-box metric. Watch the `Qwen/` org for a public checkpoint.</p>
           
         </article>
         
@@ -158,18 +160,18 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
         <article class="paper" id="paper-3">
           <div class="paper__head">
             <div>
-              <p class="paper__num">Paper #3 · Chen et al., 2026</p>
-              <h3 class="paper__title">VocalParse — Singing-Voice Transcription with a Large Audio Language Model</h3>
+              <p class="paper__num">Paper #3 · </p>
+              <h3 class="paper__title">MulTTiPop — Multitrack Transcription Dataset for Pop Music (Pruyne et al., 2026) — *NEW THIS WEEK*</h3>
               <p class="paper__meta">
-                <span>arXiv:2605.04613</span>
+                <span>arXiv:2607.08756</span>
                 <span>·</span>
-                <span>Submitted 6 May 2026</span>
+                <span>Submitted 9 Jul 2026 (v1, 754 KB, 8 pages, 4 figures)</span>
               </p>
             </div>
           </div>
-          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2605.04613" target="_blank" rel="noopener">arXiv:2605.04613</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> VocalParse fine-tunes Qwen3-ASR-1.7B (a Whisper-encoder + Qwen-LLM-decoder LALM) to emit *interleaved* lyric + pitch + note-value + global-BPM tokens in one autoregressive pass. The CoT trick — generate plain lyrics first, then the structured score — is what makes the model robust on OOD singing. They back it with **SingCrawl**, a web-scale pseudo-labeling pipeline for SVS data, and report SOTA on Opencpop / ACE-KiSing / OpenSinger / PopCS.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Code + weights + data pipeline released.** GitHub: <https://github.com/pymaster17/VocalParse>. Model card + checkpoint: <https://huggingface.co/pymaster/VocalParse> (Apache 2.0). ~400 new AST vocabulary tokens, `uv` install instructions included.</p>
+          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2607.08756" target="_blank" rel="noopener">arXiv:2607.08756</a></p>
+          <p class="paper__summary"><strong>Summary:</strong> A **reproducible commercial-pop eval set** with tempo-warped multitrack MIDI aligned to Lakh MIDI + TheoryTab audio. The headline number is brutal: the *best* SOTA AMT model hits 38% Onset F1 on real commercial pop — for context, MuScriptor posts 60.4 Onset F1 on its own held-out test set. The gap is the real story: this is a community invitation to stop reporting numbers only on synthetic or cleanly-stemmed test sets. A separate CMU/Adobe team publishing a hard real-world AMT eval in the same week MuScriptor ships is the kind of productive tension the field needs.</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Dataset + sound examples public.** Project page: <https://gclef-cmu.org/multtipop>. CC BY 4.0 license. The paper is explicit that the dataset is **for evaluation only, not training** (commercial-audio copyright). This is the new mandatory baseline to beat.</p>
           
         </article>
         
@@ -177,12 +179,69 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
         <article class="paper" id="paper-4">
           <div class="paper__head">
             <div>
-              <p class="paper__num">Paper #4 · Xu, 2026</p>
+              <p class="paper__num">Paper #4 · Zhao et al., 2026</p>
+              <h3 class="paper__title">MuseAgent-1 — Interactive Grounded Multimodal Understanding of Music Scores + Performance Audio</h3>
+              <p class="paper__meta">
+                <span>arXiv:2601.11968</span>
+                <span>·</span>
+                <span>Submitted 17 Jan 2026 (v1, 2,374 KB) — companion to ICLR 2026 submission #17059</span>
+              </p>
+            </div>
+          </div>
+          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2601.11968" target="_blank" rel="noopener">arXiv:2601.11968</a></p>
+          <p class="paper__summary"><strong>Summary:</strong> The cleanest *architecture-pattern* paper in the field: stick a CQT-based AMT module (audio→MusicXML/JSON) and a measure-wise OMR module (sheet image→ABC) in front of an LLM, plus a retrieval layer over symbolic + audio libraries, and you get a system that actually answers "what key is this passage modulating to?" — something stock MLLMs like Gemini-2.5-Pro routinely fail at. With GPT-4.1 as the orchestrator, MuseAgent hits 79.1% accuracy on the audio slice of MuseBench. The paper's hidden importance: it gives the field the *vocabulary* (M-OMR + AMT + RAG + LLM) that every later paper cites.</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Partial.** Paper + ICLR OpenReview submission at <https://openreview.net/forum?id=kDqH5KmRWR> linked. No first-party public GitHub repo; the AMT and OMR modules themselves rely on existing baselines. Worth a follow-up to the authors (Wei Hu, BUCT) for a code drop.</p>
+          
+        </article>
+        
+
+        <article class="paper" id="paper-5">
+          <div class="paper__head">
+            <div>
+              <p class="paper__num">Paper #5 · Chen et al., 2026</p>
+              <h3 class="paper__title">VocalParse — Singing-Voice Transcription with a Large Audio Language Model</h3>
+              <p class="paper__meta">
+                <span>arXiv:2605.04613</span>
+                <span>·</span>
+                <span>Submitted 6 May 2026 (v1)</span>
+              </p>
+            </div>
+          </div>
+          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2605.04613" target="_blank" rel="noopener">arXiv:2605.04613</a></p>
+          <p class="paper__summary"><strong>Summary:</strong> VocalParse fine-tunes Qwen3-ASR-1.7B (a Whisper-encoder + Qwen-LLM-decoder LALM) to emit *interleaved* lyric + pitch + note-value + global-BPM tokens in one autoregressive pass. The CoT trick — generate plain lyrics first, then the structured score — is what makes the model robust on OOD singing. They back it with **SingCrawl**, a web-scale pseudo-labeling pipeline for SVS data, and report SOTA on Opencpop / ACE-KiSing / OpenSinger / PopCS (audio-lyric MAE_pitch 0.35 on Opencpop, beating even the teacher annotator). Ablation: CoT reduces WER from 7.18% to 3.79%.</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Code + weights + data pipeline released.** GitHub: <https://github.com/pymaster17/VocalParse>. Model card + checkpoint: <https://huggingface.co/pymaster/VocalParse> (Apache 2.0). ~400 new AST vocabulary tokens, `uv` install instructions included. **The same Qwen3-ASR-1.7B backbone is what Qwen-Music now uses as its in-loop lyrics metric — VocalParse is the "AMT side" of that arrangement.**</p>
+          
+        </article>
+        
+
+        <article class="paper" id="paper-6">
+          <div class="paper__head">
+            <div>
+              <p class="paper__num">Paper #6 · Bhandari et al., 2026</p>
+              <h3 class="paper__title">Text2Score — Sheet-Music Generation with an LLM Planner</h3>
+              <p class="paper__meta">
+                <span>arXiv:2605.13431</span>
+                <span>·</span>
+                <span>Submitted 13 May 2026 (v2: 29 Jul 2026)</span>
+              </p>
+            </div>
+          </div>
+          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2605.13431" target="_blank" rel="noopener">arXiv:2605.13431</a></p>
+          <p class="paper__summary"><strong>Summary:</strong> Text2Score is the *inverse* of AMT: text → score. The reason it earns a slot here is the *architecture* — an LLM plans musical structure bar-by-bar (key, time signature, instruments, harmony) and a smaller generator executes the notes, decoupling musical reasoning from token-level synthesis. Beats both a pure LLM agent and three end-to-end baselines on expert evaluation. Useful conceptual sibling to MuseAgent and Libretto.</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Code, dataset, eval set, and prompts all open.** GitHub: <https://github.com/keshavbhandari/text2score/>. Demo: <https://keshavbhandari.github.io/portfolio/text2score>. CC BY 4.0.</p>
+          
+        </article>
+        
+
+        <article class="paper" id="paper-7">
+          <div class="paper__head">
+            <div>
+              <p class="paper__num">Paper #7 · Xu, 2026</p>
               <h3 class="paper__title">Libretto — Symbolic Music for LLM Agents</h3>
               <p class="paper__meta">
                 <span>arXiv:2606.22708</span>
                 <span>·</span>
-                <span>Submitted 21 Jun 2026</span>
+                <span>Submitted 21 Jun 2026 (v1)</span>
               </p>
             </div>
           </div>
@@ -193,78 +252,21 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
         </article>
         
 
-        <article class="paper" id="paper-5">
+        <article class="paper" id="paper-8">
           <div class="paper__head">
             <div>
-              <p class="paper__num">Paper #5 · Bhandari et al., 2026</p>
-              <h3 class="paper__title">Text2Score — Sheet-Music Generation with an LLM Planner</h3>
-              <p class="paper__meta">
-                <span>arXiv:2605.13431</span>
-                <span>·</span>
-                <span>Submitted 13 May 2026 (v2: 29 Jul 2026)</span>
-              </p>
-            </div>
-          </div>
-          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2605.13431" target="_blank" rel="noopener">arXiv:2605.13431</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> Text2Score is the inverse of AMT: text → score. The reason it earns a slot here is the *architecture* — an LLM plans musical structure bar-by-bar (key, time signature, instruments, harmony) and a smaller generator executes the notes, decoupling musical reasoning from token-level synthesis. Beats both a pure LLM agent and three end-to-end baselines on expert evaluation. Useful conceptual sibling to MuseAgent and Libretto.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Code, dataset, eval set, and prompts all open.** GitHub: <https://github.com/keshavbhandari/text2score/>. Demo: <https://keshavbhandari.github.io/portfolio/text2score>. CC BY 4.0.</p>
-          
-        </article>
-        
-
-        <article class="paper" id="paper-6">
-          <div class="paper__head">
-            <div>
-              <p class="paper__num">Paper #6 · Yang et al., 2026</p>
-              <h3 class="paper__title">HeartMuLa — Open-Source Music Foundation Model Family</h3>
+              <p class="paper__num">Paper #8 · </p>
+              <h3 class="paper__title">HeartMuLa v3 — Open-Source Music Foundation Model Family (Yang et al., 2026) — *v3 dropped 7 Jul 2026*</h3>
               <p class="paper__meta">
                 <span>arXiv:2601.10547</span>
                 <span>·</span>
-                <span>Submitted 15 Jan 2026 (v3: 7 Jul 2026)</span>
+                <span>Submitted 15 Jan 2026 (v1) → **7 Jul 2026 (v3, this cycle)**</span>
               </p>
             </div>
           </div>
           <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2601.10547" target="_blank" rel="noopener">arXiv:2601.10547</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> HeartMuLa is a Chinese-academic attempt to reproduce a Suno-class song-generation system end-to-end. The reason it matters for AMT-watchers is **HeartTranscriptor** — a dedicated lyric-recognition model that operates as the *vocal-side* counterpart to a Melodia/MT3-style note transcriber. It also bundles a 12.5 Hz music codec, which is the right frame-rate regime for long-form symbolic reasoning. Suno-level quality on academic-scale data is the headline claim.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Open-source release.** Repo + model zoo via the first author's GitHub (Dongchao Yang / Zhejiang University + ByteDance). Apache-style code license; weights gated. Worth flagging because the bundle is the most ambitious "music LLM" stack from a non-US group to date.</p>
-          
-        </article>
-        
-
-        <article class="paper" id="paper-7">
-          <div class="paper__head">
-            <div>
-              <p class="paper__num">Paper #7 · Chaturvedi et al., 2026</p>
-              <h3 class="paper__title">Advancing Multi-Instrument Music Transcription — 2025 AMT Challenge Results</h3>
-              <p class="paper__meta">
-                <span>arXiv:2603.27528</span>
-                <span>·</span>
-                <span>Submitted 29 Mar 2026</span>
-              </p>
-            </div>
-          </div>
-          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2603.27528" target="_blank" rel="noopener">arXiv:2603.27528</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> The community benchmark for 2025/2026. Top systems (MIROS at F1 ≈0.60, YourMT3-YPTF-MoE-M at ≈0.59) both use YourMT3-style encoder–decoder Transformers with mixture-of-experts, not LLMs. The big takeaway is that *purely* token-prediction transformer architectures still beat the LALM/orchestration-style models on the raw metric — but only on a fixed eval; the LALM approach wins on flexibility and OOD.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Challenge artifacts public, per-team code varies.** Leaderboard and eval protocol at the 2025 AMT Challenge site. Several top teams (MIROS, YourMT3 variants) have GitHub repos; check the appendix of the paper.</p>
-          
-        </article>
-        
-
-        <article class="paper" id="paper-8">
-          <div class="paper__head">
-            <div>
-              <p class="paper__num">Paper #8 · Jiang et al., 2025</p>
-              <h3 class="paper__title">MuFun — Unified Foundation Model for Music Understanding</h3>
-              <p class="paper__meta">
-                <span>arXiv:2508.01178</span>
-                <span>·</span>
-                <span>Submitted 2 Aug 2025</span>
-              </p>
-            </div>
-          </div>
-          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2508.01178" target="_blank" rel="noopener">arXiv:2508.01178</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> MuFun is an end-to-end trainable foundation model that consumes interleaved audio+text, with score transcription as a *first-class* training objective alongside genre/tagging/QA. Long-context 390 s training window. Less flashy than MuScriptor but conceptually important: it's an argument that the right unit isn't "one model per MIR task" but a single shared backbone.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Paper open, code not in abstract.** The authors (Yi Jiang et al., ByteDance) have a MuCUE benchmark page; no public checkpoint or repo link in v1 as of this writing.</p>
+          <p class="paper__summary"><strong>Summary:</strong> Chinese-academic attempt to reproduce a Suno-class song-generation system end-to-end. The reason it matters for AMT-watchers is **HeartTranscriptor** — a dedicated lyric-recognition model that operates as the *vocal-side* counterpart to a Melodia/MT3-style note transcriber. v3 (this cycle) tightens the report. The bundle is the most ambitious "music LLM" stack from a non-US group to date; it's the direct intellectual predecessor to Qwen-Music.</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ✅ **Open-source release.** First-author GitHub (Dongchao Yang, ZJU + ByteDance); Apache-style code license; weights gated. Companion: a SongSage lyric LM (arXiv:2601.00325) is in the same orbit.</p>
           
         </article>
         
@@ -272,18 +274,18 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
         <article class="paper" id="paper-9">
           <div class="paper__head">
             <div>
-              <p class="paper__num">Paper #9 · Penarrubia et al., 2026</p>
-              <h3 class="paper__title">MuSViT — First Foundation Vision Model for Sheet Music</h3>
+              <p class="paper__num">Paper #9 · Chaturvedi et al., 2026</p>
+              <h3 class="paper__title">Advancing Multi-Instrument Music Transcription — 2025 AMT Challenge Results</h3>
               <p class="paper__meta">
-                <span>arXiv:2606.31811</span>
+                <span>arXiv:2603.27528</span>
                 <span>·</span>
-                <span>Submitted 30 Jun 2026 (accepted at ECCV '26)</span>
+                <span>Submitted 29 Mar 2026 (v1)</span>
               </p>
             </div>
           </div>
-          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2606.31811" target="_blank" rel="noopener">arXiv:2606.31811</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> The sheet-music-side counterpart to MuScriptor. Pre-trains a ViT on **9.7 M IMSLP pages** with a synthetic→real curriculum, then evaluates on full-page and staff-level OMR, symbol detection, and difficulty classification. Important complement to MuseAgent-1, which uses OMR as a perceptual front-end — MuSViT is the encoder that front-end *should* be using.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Not yet at v1.** Abstract doesn't link a repo; check the ECCV '26 camera-ready.</p>
+          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2603.27528" target="_blank" rel="noopener">arXiv:2603.27528</a></p>
+          <p class="paper__summary"><strong>Summary:</strong> The community benchmark for 2025/2026. Top systems (MIROS at F1 ≈0.60, YourMT3-YPTF-MoE-M at ≈0.59) both use YourMT3-style encoder–decoder Transformers with mixture-of-experts, not LLMs. The big takeaway is that *purely* token-prediction transformer architectures still beat the LALM/orchestration-style models on the raw metric — but only on a fixed eval; the LALM approach wins on flexibility and OOD. **Now that MulTTiPop has landed, expect a v2 of this challenge to use it as the new test set.**</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Challenge artifacts public, per-team code varies.** Leaderboard and eval protocol at the 2025 AMT Challenge site. Top teams (MIROS, YourMT3 variants) have GitHub repos in the paper appendix.</p>
           
         </article>
         
@@ -291,18 +293,18 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
         <article class="paper" id="paper-10">
           <div class="paper__head">
             <div>
-              <p class="paper__num">Paper #10 · Komiya & Fukuhara, 2024→2026</p>
-              <h3 class="paper__title">AMT-APC — Fine-Tuning an AMT Model for Piano Cover</h3>
+              <p class="paper__num">Paper #10 · </p>
+              <h3 class="paper__title">"Evaluating Multimodal Large Language Models on Core Music Perception Tasks" (Carone, Roman, Ripollés, 2025) — *NEW THIS WEEK*</h3>
               <p class="paper__meta">
-                <span>arXiv:2409.14086</span>
+                <span>arXiv:2510.22455</span>
                 <span>·</span>
-                <span>Submitted 21 Sep 2024 (v2: 4 Jul 2026)</span>
+                <span>Submitted 25 Oct 2025; **accepted at NeurIPS 2025 Workshop on AI for Music (AI4Music)**</span>
               </p>
             </div>
           </div>
-          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2409.14086" target="_blank" rel="noopener">arXiv:2409.14086</a></p>
-          <p class="paper__summary"><strong>Summary:</strong> A 2024 paper that resurfaced this week (v2 dropped 4 Jul 2026). It fine-tunes hFT-Transformer (a piano-AMT model) as the backbone for automatic piano cover generation — i.e. it uses an *AMT* model as a *generation* prior. Small but conceptually clean evidence that AMT models carry enough musical structure to seed downstream symbolic-music tasks.</p>
-          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Paper open, no repo link in abstract.** Authors are at Hosei University, JP.</p>
+          <p class="paper__details"><strong>arXiv:</strong> <a href="https://arxiv.org/abs/2510.22455" target="_blank" rel="noopener">arXiv:2510.22455</a></p>
+          <p class="paper__summary"><strong>Summary:</strong> The cleanest empirical argument for *why* the AMT-as-front-end architecture (MuseAgent) and the LALM-CoT architecture (VocalParse) are not optional. The paper's central claim — "current systems reason well over symbols (MIDI) but do not yet 'listen' reliably from audio" — is the most-quotable line in the field right now. Adapting LogicLM to music (orchestrate an LLM with a symbolic solver) is a clever baseline: it shows that even when you give the model a *structured* reasoning partner, the bottleneck is still the audio encoder. Every paper in this report except MuScriptor is downstream of this finding.</p>
+          <p class="paper__details"><strong>Reproducibility:</strong> ⚠️ **Paper + dataset at the workshop page; no first-party code linked from the abstract.** The accompanying prompt set is short enough to be reproducible from the paper alone.</p>
           
         </article>
         
@@ -318,10 +320,15 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
           <div class="card">
             <pre class="tester__output" style="max-height: 300px;">Borderline — log for next week, may be promoted to main list:
 
-- TART: A Comprehensive Tool for Technique-Aware Audio-to-Tab Guitar Transcription (Gupta et al., 2026, on the current arXiv cs.SD listing). Audio-to-tab is a sibling of AMT; worth checking whether it uses a foundation-model backbone. URL: <https://arxiv.org/abs/2607.xxxxx> (search the Jul 2026 cs.SD new-list).
-- TinyMU: A Lightweight (229 M) Music-Language Model (Li, Quelennec, Essid, 2026-04-17). Claims to match much larger LALMs at <250 M params. If the released checkpoint is real, this is the cheapest way to get a music-ML backbone in our pipeline.
-- NotaGen (Wang et al., arXiv:2502.18008) — uses the pretraining + fine-tuning + RL (CLaMP-DPO) trio to generate classical sheet music. Same paradigm family as HeartMuLa/MuScriptor. Worth tracking for the convergence story.
-- Parameter-Efficient Transfer Learning for Music Foundation Models (older but increasingly cited). If we're going to fine-tune any of these on private corpora, PEFT is the lever.
+- MuSViT (Penarrubia et al., arXiv:2606.31811, ECCV '26) — First foundation vision model for sheet music (ViT pre-trained on 9.7 M IMSLP pages). Camera-ready TBD; no repo at v1.
+- MuFun (Jiang et al., arXiv:2508.01178, ByteDance) — Unified music FM with score transcription as a first-class task. Long-context 390 s training window. SOTA on MuCUE (+15 pts over Qwen2.5-Omni). No public checkpoint in v1.
+- AMT-APC v2 (Komiya & Fukuhara, arXiv:2409.14086, v2 2026-07-04) — Fine-tunes hFT-Transformer for piano cover generation. Small but conceptually clean.
+- Pushing the Frontier of Full-Song Generation (Dai et al., arXiv:2607.20253, Alibaba Token Foundry, 23 Jul 2026) — Hierarchical autoregressive planning + flow-matching rendering. Generation-side companion to Qwen-Music.
+- TinyMU: A Compact Audio-Language Model for Music Understanding (Li, Quelennec, Essid, arXiv:2604.xxxxx, 2026-04-17) — Claims 229 M-param LALM competitive with much larger models. Cheap backbone option.
+- TART: Technique-Aware Audio-to-Tab Guitar Transcription (Gupta et al., Jul 2026 cs.SD listing) — Audio-to-tab is a sibling of AMT; worth checking whether it uses a foundation-model backbone.
+- Audio Flamingo Next / Music Flamingo (Ghosh et al., ICLR 2026, NVIDIA) — open audio-language model family; transcription is in the training mix.
+- Sage-Music / Libretto's "music cloud" (Xu, 2026) — adjacent symbolic-music reasoning paper; the LLM-as-music-critic angle is worth tracking.
+- NotaGen (Wang et al., arXiv:2502.18008) — uses the pretraining + fine-tuning + RL (CLaMP-DPO) trio to generate classical sheet music. Same paradigm family as HeartMuLa/MuScriptor.
 
 ---</pre>
           </div>
@@ -336,19 +343,24 @@ STATUS: PASS or STATUS: FAIL - &lt;reason&gt;
             </div>
           </div>
           <div class="card">
-            <pre class="tester__output" style="max-height: 240px;">Queries run during this scan (in order):
+            <pre class="tester__output" style="max-height: 240px;">Queries run during this scan (in order, deduplicated from the prior cycle):
 
-1. `arxiv "automatic music transcription" LLM 2025 2026` — surfaced MuScriptor, 2025 AMT Challenge, HeartMuLa, AMT-APC, MT3.
-2. `arxiv "audio-to-score" agent foundation model music` — surfaced Text2Score, MuSViT, HeartMuLa.
-3. `arxiv AMT GPT music transcription foundation model` — surfaced MuScriptor, MuseAgent, HeartMuLa, MuFun.
-4. `arxiv music transcription large language model agent 2026` — surfaced MuseAgent, Libretto, 2025 AMT Challenge.
+1. `arxiv "automatic music transcription" LLM 2026 foundation model July` — surfaced MuScriptor, MulTTiPop, HeartMuLa v3, 2025 AMT Challenge, AMT-APC v2.
+2. `arxiv "audio-to-score" agent foundation model music` — surfaced Text2Score, MuSViT, HeartMuLa, Pushing the Frontier of Full-Song Generation.
+3. `arxiv AMT GPT music transcription foundation model` — surfaced MuScriptor, MuseAgent, HeartMuLa, MuFun, Qwen-Music.
+4. `arxiv music transcription large language model agent 2026` — surfaced MuseAgent, Libretto, 2025 AMT Challenge, Carone et al.
 5. `arxiv sheet music generation transformer 2026 foundation model agent` — surfaced Text2Score, MuSViT, NotaGen, Sheet Music Transformer++.
-6. `MuScriptor github muscriptor multi-instrument transcription` — confirmed https://github.com/muscriptor/muscriptor.
-7. `MuseAgent-1 github code multimodal music` — partial: OpenReview submission linked; no first-party code repo in abstract.
-8. `arxiv "music transcription" July 2026 OR June 2026 OR May 2026 foundation model` — surfaced MulTTiPop, MuScriptor, AMT-APC v2, TART, Sage-Music.
-9. `"VocalParse" singing voice transcription large audio language model 2026 github` — confirmed https://github.com/pymaster17/VocalParse.
+6. `arxiv cs.SD July 2026 music transcription agent foundation model LLM new` — surfaced MuScriptor, MulTTiPop, TART, Sage-Music.
+7. `"arXiv" "music" "agent" OR "LLM" 2026 audio transcription piano singing voice latest` — surfaced VocalParse, Libretto, Qwen-Music, Poly-SVC, DiTSinger.
+8. `arxiv cs.SD 2026 multitrack transcription agent tool use OMR July` — surfaced MuseAgent, MuScriptor, MulTTiPop, Audio Flamingo Next.
+9. `arxiv 2026 singing voice transcription LALM Qwen lyrics melody CoT` — confirmed VocalParse; surfaced the Qwen3-ASR ↔ Qwen-Music connection.
+10. `MuScriptor github muscriptor multi-instrument transcription` — confirmed https://github.com/muscriptor/muscriptor (941 stars, 122 forks, MIT code, CC BY-NC 4.0 weights).
+11. `"VocalParse" singing voice transcription large audio language model 2026 github` — confirmed https://github.com/pymaster17/VocalParse; cross-linked Qwen3-ASR backbone.
+12. `Qwen-Music Melody-CoT arxiv 2026 Qwen3-ASR lyrics intelligibility` — confirmed arXiv:2607.11699, v2 27 Jul 2026; the Qwen3-ASR eval hook is the field-relevant nugget.
 
-**Sparse-spot check:** 2025-2026 papers on AMT × LLM are *not* sparse — the intersection is producing a paper every 1–2 weeks. The 2024 fallback listed in the task spec is *not* needed.</pre>
+**Sparse-spot check:** 2025-2026 papers on AMT × LLM are *not* sparse — the intersection is producing a paper every 1–2 weeks, and the centre-of-gravity is now visibly moving from "AMT paper that uses an LLM as a frontend" to "AMT paper that is *in the loop* of a generation FM." The 2024 fallback listed in the task spec is *not* needed.
+
+**Verification pass:** Every primary URL in this report (arXiv abs, GitHub repo, Hugging Face card, project page) was fetched and confirmed in this session. The two arXiv pages with new versions (Qwen-Music v2 2026-07-27, HeartMuLa v3 2026-07-07) were re-pulled; the version numbers and byte sizes are correct as of cycle time.</pre>
           </div>
         </section>
         
