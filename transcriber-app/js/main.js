@@ -353,56 +353,122 @@
     mediaRecorder.start();
   }
 
-  // ── ACF Pitch Detection (YB PMEF — improved ACF) ─────────
-  // Uses first-principles autocorrelation with parabolic interpolation
-  // and a harmonic-composite mask for polyphonic robustness.
+  // ── Pitch detection: FFT + weighted Harmonic Product Spectrum ──────
+  // ACF on pure/monotone signals is biased toward the longest-lag subharmonic
+  // (finite-window effect). The HPS approach: Hann-windowed FFT, then score
+  // each candidate bin by summing magnitudes at k, k/2, k/3, k/4, k/5 with
+  // 1/h weighting (stronger fundamental match = higher score). Global max
+  // in HPS = fundamental, robust for both sine and harmonic signals.
   function acfPitch(buffer, sampleRate) {
     const N = buffer.length;
-    const minLag = Math.floor(sampleRate / MAX_HZ);
-    const maxLag = Math.floor(sampleRate / MIN_HZ);
 
-    // Compute RMS to check silence
+    // Silence detection via RMS
     let rms = 0;
     for (let i = 0; i < N; i++) rms += buffer[i] * buffer[i];
     rms = Math.sqrt(rms / N);
     const thresh = 0.002 + (10 - state.sensitivity) * 0.003;
     if (rms < thresh) return { hz: 0, clarity: 0 };
 
-    // Normalized autocorrelation
-    const c = new Float32Array(maxLag + 1);
-    for (let lag = 0; lag <= maxLag; lag++) {
-      let sum = 0, norm = 0;
-      for (let i = 0; i < N - lag; i++) {
-        sum  += buffer[i] * buffer[i + lag];
-        norm += buffer[i] * buffer[i] + buffer[i+lag] * buffer[i+lag];
+    // Apply Hann window to reduce spectral leakage
+    const win = new Float64Array(N);
+    for (let i = 0; i < N; i++) win[i] = buffer[i] * 0.5 * (1 - Math.cos(2 * Math.PI * i / (N - 1)));
+
+    // FFT (in-place)
+    const fftSize = nextPow2(N);
+    const re = new Float64Array(fftSize);
+    const im = new Float64Array(fftSize);
+    for (let i = 0; i < N; i++) re[i] = win[i];
+
+    fft(re, im);
+
+    const binHz = sampleRate / fftSize;
+    const minBin = Math.max(1, Math.floor(MIN_HZ / binHz));
+    const maxBin = Math.min(fftSize / 2 - 1, Math.ceil(MAX_HZ / binHz));
+
+    // Magnitude spectrum (only bins we care about)
+    const mag = new Float64Array(maxBin + 1);
+    for (let k = minBin; k <= maxBin; k++) {
+      mag[k] = Math.sqrt(re[k] * re[k] + im[k] * im[k]);
+    }
+
+    // HPS: weighted sum of mag at h, h/2, h/3, h/4, h/5. Global max = fundamental.
+    const harmonics = 5;
+    const hps = new Float64Array(maxBin + 1);
+    for (let f = minBin; f <= maxBin; f++) {
+      let p = 0;
+      for (let h = 1; h <= harmonics; h++) {
+        const idx = Math.floor(f / h);
+        if (idx < 1) break;
+        p += mag[idx] / h; // 1/h weighting — fundamental contributes most
       }
-      c[lag] = norm > 0 ? (2 * sum / norm) : 0;
+      hps[f] = p;
     }
 
-    // Peak picking — find the first major peak in ACF
-    let bestLag = minLag;
-    let bestC   = c[minLag];
-    for (let lag = minLag + 1; lag < maxLag; lag++) {
-      if (c[lag] > c[lag-1] && c[lag] > c[lag+1] && c[lag] > bestC) {
-        bestC   = c[lag];
-        bestLag = lag;
-      }
+    // Global maximum
+    let bestBin = minBin;
+    let bestHps = hps[minBin];
+    for (let k = minBin + 1; k <= maxBin; k++) {
+      if (hps[k] > bestHps) { bestHps = hps[k]; bestBin = k; }
     }
 
-    // Parabolic interpolation around peak for sub-bin accuracy
-    if (bestLag > 0 && bestLag < maxLag) {
-      const alpha = c[bestLag - 1], beta = c[bestLag], gamma = c[bestLag + 1];
-      const p = 0.5 * (alpha - gamma) / (alpha - 2*beta + gamma);
-      bestLag += p;
-    }
+    if (bestBin <= minBin || bestBin >= maxBin) return { hz: 0, clarity: 0 };
 
-    const hz = sampleRate / bestLag;
+    // Parabolic interpolation around peak
+    const a = hps[bestBin - 1], b = hps[bestBin], c = hps[bestBin + 1];
+    const denom = a - 2 * b + c;
+    const refined = Math.abs(denom) > 1e-9 ? bestBin + 0.5 * (a - c) / denom : bestBin;
+
+    const hz = refined * binHz;
     if (hz < MIN_HZ || hz > MAX_HZ) return { hz: 0, clarity: 0 };
 
-    // Clarity = normalized ACF value at lag (0 = no periodicity, 1 = perfect)
-    const clarity = Math.max(0, Math.min(1, bestC));
+    // Clarity = peak vs. neighbor-mean (peak's ±10 bins)
+    let neighborSum = 0;
+    const lo = Math.max(minBin, bestBin - 10), hi = Math.min(maxBin, bestBin + 10);
+    for (let k = lo; k <= hi; k++) if (k !== bestBin) neighborSum += hps[k];
+    const neighborAvg = neighborSum / 20;
+    const clarity = neighborAvg > 0 ? Math.min(1, hps[bestBin] / (neighborAvg * 3)) : 0;
+    if (clarity < CLARITY_THRESH) return { hz: 0, clarity: 0 };
 
     return { hz, clarity };
+  }
+
+  function nextPow2(n) {
+    let p = 1; while (p < n) p <<= 1; return p;
+  }
+
+  // In-place radix-2 Cooley-Tukey FFT (decimation-in-time)
+  function fft(re, im) {
+    const n = re.length;
+    // Bit-reversal permutation
+    for (let i = 1, j = 0; i < n; i++) {
+      let bit = n >> 1;
+      for (; j & bit; bit >>= 1) j ^= bit;
+      j ^= bit;
+      if (i < j) {
+        [re[i], re[j]] = [re[j], re[i]];
+        [im[i], im[j]] = [im[j], im[i]];
+      }
+    }
+    // Butterflies
+    for (let len = 2; len <= n; len <<= 1) {
+      const halfLen = len >> 1;
+      const ang = -2 * Math.PI / len;
+      const wRe = Math.cos(ang), wIm = Math.sin(ang);
+      for (let i = 0; i < n; i += len) {
+        let curRe = 1, curIm = 0;
+        for (let k = 0; k < halfLen; k++) {
+          const tRe = curRe * re[i + k + halfLen] - curIm * im[i + k + halfLen];
+          const tIm = curRe * im[i + k + halfLen] + curIm * re[i + k + halfLen];
+          re[i + k + halfLen] = re[i + k] - tRe;
+          im[i + k + halfLen] = im[i + k] - tIm;
+          re[i + k] += tRe;
+          im[i + k] += tIm;
+          const nRe = curRe * wRe - curIm * wIm;
+          curIm = curRe * wIm + curIm * wRe;
+          curRe = nRe;
+        }
+      }
+    }
   }
 
   // ── Process audio buffer → notes ──────────────────────────
